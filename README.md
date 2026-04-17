@@ -82,6 +82,29 @@ npx skills add https://github.com/laravel/boost --skill laravel-best-practices
 npx skills add https://github.com/jeffallan/claude-skills --skill php-pro
 ```
 
+### WordPress
+
+```bash
+npx skills add https://github.com/wordpress/agent-skills --skill wp-plugin-development
+npx skills add https://github.com/wordpress/agent-skills --skill wp-rest-api
+npx skills add https://github.com/wordpress/agent-skills --skill wp-block-themes
+npx skills add https://github.com/wordpress/agent-skills --skill wp-block-development
+npx skills add https://github.com/wordpress/agent-skills --skill wp-performance
+npx skills add https://github.com/wordpress/agent-skills --skill wordpress-router
+npx skills add https://github.com/wordpress/agent-skills --skill wp-wpcli-and-ops
+npx skills add https://github.com/wordpress/agent-skills --skill wp-abilities-api
+npx skills add https://github.com/wordpress/agent-skills --skill wp-interactivity-api
+npx skills add https://github.com/wordpress/agent-skills --skill wpds
+npx skills add https://github.com/automattic/wordpress-activitypub --skill code-style
+
+npx skills add https://github.com/bartekmis/wordpress-performance-best-practises --skill wordpress-performance-best-practices
+
+npx skills add https://github.com/jeffallan/claude-skills --skill wordpress-pro
+
+npx skills add https://github.com/sickn33/antigravity-awesome-skills --skill wordpress-woocommerce-development
+
+```
+
 ### Database
 
 ```bash
