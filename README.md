@@ -108,13 +108,3 @@ npx skills add https://github.com/twostraws/swiftui-agent-skill --skill swiftui-
 ```bash
 npx skills add https://github.com/wshobson/agents --skill github-actions-templates
 ```
-
----
-
-## Quick add template
-
-Use this block when you want to add a new group or add another skill:
-
-```md
-npx skills add https://github.com/HungNth/agent-skills --skill <alias>
-```
