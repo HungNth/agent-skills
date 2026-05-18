@@ -20,6 +20,10 @@ skills/
 npx skills add https://github.com/HungNth/agent-skills --skill photoshop-uxp-scripting
 ```
 
+```bash
+npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nodejs-plugin
+```
+
 ---
 
 ## Useful skills
