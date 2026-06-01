@@ -34,6 +34,7 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nod
 npx skills add https://github.com/obra/superpowers --skill executing-plans
 npx skills add https://github.com/obra/superpowers --skill writing-plans
 npx skills add https://github.com/obra/superpowers --skill brainstorming
+npx skills add https://github.com/github/awesome-copilot --skill create-readme
 
 npx skills add https://github.com/anthropics/claude-code --skill 'Skill Development'
 npx skills add https://github.com/anthropics/skills --skill skill-creator
@@ -43,12 +44,13 @@ npx skills add https://github.com/github/awesome-copilot --skill refactor-plan
 npx skills add https://github.com/antfu/skills --skill vite
 npx skills add https://github.com/antfu/skills --skill pnpm
 
-npx skills add https://github.com/github/awesome-copilot --skill create-readme
 ```
 
 ### Frontend
 
 ```bash
+npx skills add https://github.com/Leonxlnx/taste-skill
+
 npx skills add https://github.com/anthropics/skills --skill frontend-design
 npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max
 
