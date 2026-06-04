@@ -54,7 +54,7 @@ npx skills add https://github.com/Leonxlnx/taste-skill
 npx skills add https://github.com/anthropics/skills --skill frontend-design
 npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max
 
-npx skills add https://skills.sh/vercel-labs/agent-skills/vercel-react-best-practices
+npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices
 npx skills add https://github.com/vercel-labs/agent-browser --skill agent-browser
 
 npx skills add https://github.com/wshobson/agents --skill typescript-advanced-types
@@ -84,6 +84,7 @@ npx skills add https://github.com/nuxt/ui --skill nuxt-ui
 
 ```bash
 npx skills add https://github.com/jeffallan/claude-skills --skill laravel-specialist
+npx skills add MrPunyapal/laravel-attributes-list --skill laravel-attributes
 npx skills add https://github.com/laravel/boost --skill laravel-best-practices
 npx skills add https://github.com/jeffallan/claude-skills --skill php-pro
 ```
