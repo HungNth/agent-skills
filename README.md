@@ -66,6 +66,7 @@ npx skills add https://github.com/secondsky/claude-skills --skill tailwind-v4-sh
 npx skills add https://github.com/shadcn/ui --skill shadcn
 
 npx skills add greensock/gsap-skills
+npx skills add diffusionstudio/lottie # https://github.com/diffusionstudio/lottie
 ```
 
 ### Vue
