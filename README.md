@@ -124,7 +124,6 @@ npx skills add https://github.com/github/awesome-copilot --skill sql-code-review
 
 ```bash
 npx skills add https://github.com/wshobson/agents --skill api-design-principles
-npx skills add https://github.com/supercent-io/skills-template --skill api-documentation
 ```
 
 ### Swift
