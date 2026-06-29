@@ -34,6 +34,8 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nod
 npx skills add https://github.com/obra/superpowers --skill executing-plans -y
 npx skills add https://github.com/obra/superpowers --skill writing-plans -y
 npx skills add https://github.com/obra/superpowers --skill brainstorming -y
+npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
+npx skills add https://github.com/obra/superpowers --skill test-driven-development -y
 npx skills add https://github.com/github/awesome-copilot --skill create-readme -y
 
 npx skills add https://github.com/anthropics/claude-code --skill 'Skill Development' -y
