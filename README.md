@@ -68,7 +68,7 @@ npx skills add https://github.com/secondsky/claude-skills --skill tailwind-v4-sh
 npx skills add https://github.com/shadcn/ui --skill shadcn -y
 
 npx skills add greensock/gsap-skills -y
-npx skills add diffusionstudio/lottie # https://github.com/diffusionstudio/lottie -y
+npx skills add diffusionstudio/lottie -y # https://github.com/diffusionstudio/lottie
 ```
 
 ### Vue
@@ -120,6 +120,8 @@ npx skills add https://github.com/sickn33/antigravity-awesome-skills --skill wor
 ```bash
 npx skills add https://github.com/wshobson/agents --skill sql-optimization-patterns -y
 npx skills add https://github.com/github/awesome-copilot --skill sql-code-review -y
+
+npx skills add https://github.com/wshobson/agents --skill postgresql-table-design -y
 ```
 
 ### API
