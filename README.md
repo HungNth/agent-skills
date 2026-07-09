@@ -38,37 +38,34 @@ npx skills add https://github.com/obra/superpowers --skill requesting-code-revie
 npx skills add https://github.com/obra/superpowers --skill test-driven-development -y
 npx skills add https://github.com/github/awesome-copilot --skill create-readme -y
 
-npx skills add https://github.com/anthropics/claude-code --skill 'Skill Development' -y
-npx skills add https://github.com/anthropics/skills --skill skill-creator -y
+```
 
-npx skills add https://github.com/github/awesome-copilot --skill refactor-plan -y
+### JavaScript / TypeScript
+
+```bash
+npx skills add https://github.com/wshobson/agents --skill typescript-advanced-types -y
+npx skills add https://github.com/wshobson/agents --skill modern-javascript-patterns -y
 
 npx skills add https://github.com/antfu/skills --skill vite -y
 npx skills add https://github.com/antfu/skills --skill pnpm -y
-
 ```
 
 ### Frontend
 
 ```bash
 npx skills add https://github.com/Leonxlnx/taste-skill -y
-
 npx skills add https://github.com/anthropics/skills --skill frontend-design -y
-npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max -y
+npx skills add https://github.com/wshobson/agents --skill web-component-design -y
 
 npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices -y
 npx skills add https://github.com/vercel-labs/agent-browser --skill agent-browser -y
 
-npx skills add https://github.com/wshobson/agents --skill typescript-advanced-types -y
-npx skills add https://github.com/wshobson/agents --skill modern-javascript-patterns -y
 npx skills add https://github.com/wshobson/agents --skill tailwind-design-system -y
-npx skills add https://github.com/wshobson/agents --skill web-component-design -y
-
 npx skills add https://github.com/secondsky/claude-skills --skill tailwind-v4-shadcn -y
 npx skills add https://github.com/shadcn/ui --skill shadcn -y
 
 npx skills add greensock/gsap-skills -y
-npx skills add diffusionstudio/lottie -y # https://github.com/diffusionstudio/lottie
+npx skills add diffusionstudio/lottie -y
 ```
 
 ### Vue
@@ -105,14 +102,22 @@ npx skills add https://github.com/wordpress/agent-skills --skill wp-wpcli-and-op
 npx skills add https://github.com/wordpress/agent-skills --skill wp-abilities-api -y
 npx skills add https://github.com/wordpress/agent-skills --skill wp-interactivity-api -y
 npx skills add https://github.com/wordpress/agent-skills --skill wpds -y
-npx skills add https://github.com/automattic/wordpress-activitypub --skill code-style -y
-
 npx skills add https://github.com/bartekmis/wordpress-performance-best-practises --skill wordpress-performance-best-practices -y
-
+npx skills add https://github.com/automattic/wordpress-activitypub --skill code-style -y
 npx skills add https://github.com/jeffallan/claude-skills --skill wordpress-pro -y
 
 npx skills add https://github.com/sickn33/antigravity-awesome-skills --skill wordpress-woocommerce-development -y
 
+```
+
+# Browser Extension
+
+```bash
+npx skills add https://github.com/addyosmani/agent-skills --skill code-simplification -y
+npx skills add https://github.com/github/awesome-copilot --skill chrome-devtools -y
+npx skills add https://github.com/mindrally/skills --skill chrome-extension-development -y
+npx skills add https://github.com/quangpl/browser-extension-skills --skill extension-ui -y
+npx skills add https://github.com/quangpl/browser-extension-skills --skill extension-analyze -y
 ```
 
 ### Database
@@ -124,10 +129,25 @@ npx skills add https://github.com/github/awesome-copilot --skill sql-code-review
 npx skills add https://github.com/wshobson/agents --skill postgresql-table-design -y
 ```
 
+### Performance / Optimization
+
+```bash
+npx skills add https://github.com/addyosmani/agent-skills --skill performance-optimization -y
+
+npx skills add https://github.com/addyosmani/agent-skills --skill code-simplification -y
+```
+
 ### API
 
 ```bash
 npx skills add https://github.com/wshobson/agents --skill api-design-principles -y
+```
+
+### Git / Github
+
+```bash
+npx skills add https://github.com/addyosmani/agent-skills --skill git-workflow-and-versioning -y
+npx skills add https://github.com/wshobson/agents --skill github-actions-templates -y
 ```
 
 ### Swift
@@ -135,10 +155,4 @@ npx skills add https://github.com/wshobson/agents --skill api-design-principles 
 ```bash
 npx skills add https://github.com/avdlee/swiftui-agent-skill --skill swiftui-expert-skill -y
 npx skills add https://github.com/twostraws/swiftui-agent-skill --skill swiftui-pro -y
-```
-
-### Github
-
-```bash
-npx skills add https://github.com/wshobson/agents --skill github-actions-templates -y
 ```
