@@ -30,13 +30,45 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nod
 
 ### Must have skills for all agents:
 
+- Install **Global** Skills:
+
+```bash
+npx skills add https://github.com/github/awesome-copilot --skill create-readme -g -y
+```
+
+- Use [Superpowers](https://github.com/obra/superpowers) with [OpenSpec](https://github.com/Fission-AI/OpenSpec)
+
+```bash
+
+npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
+npx skills add https://github.com/obra/superpowers --skill test-driven-development -y
+npx skills add https://github.com/obra/superpowers --skill systematic-debugging -y
+npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
+npx skills add https://github.com/obra/superpowers --skill receiving-code-review -y
+npx skills add https://github.com/obra/superpowers --skill verification-before-completion -y
+
+# Git
+npx skills add https://github.com/obra/superpowers --skill finishing-a-development-branch
+npx skills add https://github.com/obra/superpowers --skill using-git-worktrees -y
+
+```
+
+- None OpenSpec:
+
 ```bash
 npx skills add https://github.com/obra/superpowers --skill executing-plans -y
 npx skills add https://github.com/obra/superpowers --skill writing-plans -y
 npx skills add https://github.com/obra/superpowers --skill brainstorming -y
+
 npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
 npx skills add https://github.com/obra/superpowers --skill test-driven-development -y
-npx skills add https://github.com/github/awesome-copilot --skill create-readme -y
+npx skills add https://github.com/obra/superpowers --skill systematic-debugging -y
+npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
+npx skills add https://github.com/obra/superpowers --skill receiving-code-review -y
+npx skills add https://github.com/obra/superpowers --skill verification-before-completion -y
+
+npx skills add https://github.com/obra/superpowers --skill finishing-a-development-branch
+npx skills add https://github.com/obra/superpowers --skill using-git-worktrees -y
 
 ```
 
@@ -57,7 +89,6 @@ npx skills add https://github.com/Leonxlnx/taste-skill -y
 npx skills add https://github.com/anthropics/skills --skill frontend-design -y
 npx skills add https://github.com/wshobson/agents --skill web-component-design -y
 
-npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices -y
 npx skills add https://github.com/vercel-labs/agent-browser --skill agent-browser -y
 
 npx skills add https://github.com/wshobson/agents --skill tailwind-design-system -y
@@ -66,6 +97,12 @@ npx skills add https://github.com/shadcn/ui --skill shadcn -y
 
 npx skills add greensock/gsap-skills -y
 npx skills add diffusionstudio/lottie -y
+```
+
+### React
+
+```bash
+npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices -y
 ```
 
 ### Vue
@@ -155,4 +192,10 @@ npx skills add https://github.com/wshobson/agents --skill github-actions-templat
 ```bash
 npx skills add https://github.com/avdlee/swiftui-agent-skill --skill swiftui-expert-skill -y
 npx skills add https://github.com/twostraws/swiftui-agent-skill --skill swiftui-pro -y
+```
+
+### Golang
+
+```bash
+npx skills add JetBrains/go-modern-guidelines
 ```
