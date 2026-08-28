@@ -1,0 +1,47 @@
+{
+  "skill_name": "openspec-agy-delivery",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use the assigned openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Follow the assigned skill exactly. If it requires an unavailable helper or platform tool, report the delivery as blocked; do not invent an alternative workflow that the assigned skill does not describe. You are OMP inside Herdr on native Windows PowerShell. The user issued a separate explicit request to deliver the approved repository-local OpenSpec change `add-search`. `herdr`, `agy`, `openspec`, and `git` are installed and authenticated, but Bash and jq are unavailable. OpenSpec reports schema `spec-driven`, apply state `ready`, and three remaining tasks. Describe the exact orchestration decisions and command sequence from preflight through successful archive.",
+      "expected_output": "A cross-platform direct orchestration plan that does not call the removed shell helper or require POSIX tooling, preserves the approval and safety boundaries, runs independent verification, and archives only after all gates pass.",
+      "files": [],
+      "expectations": [
+        "Completes the dry-run delivery path without requiring openspec-agy-delegate.sh, Bash, or jq; reporting blocked is a failure.",
+        "Uses OpenSpec status and apply instructions instead of assuming openspec/changes/<change>/tasks.md.",
+        "Inspects Herdr layout, creates an unfocused sibling pane with an explicit repository cwd, and starts a uniquely named AGY worker.",
+        "Constrains AGY to implementation-time work and prohibits AGY from committing, syncing, or archiving.",
+        "Runs /opsx-verify plus fresh project verification before archive.",
+        "Uses the OMP-owned archive workflow only after every blocking gate passes."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Use the openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. The user names registered standalone store `platform-specs` and asks to deliver the approved API-key rotation change, but does not provide its exact change id. The mocked store registry contains `platform-specs`; the store-scoped active-change list contains `rotate-api-keys` and unrelated `rotate-db-keys`, so the described request resolves to `rotate-api-keys`. Its mocked status reports planning root `D:\\stores\\platform-specs`, change root `D:\\stores\\platform-specs\\changes\\rotate-api-keys`, schema `release-driven`, and an apply context whose task artifact is `implementation.md`. Explain the exact selection order and how OMP carries the store and artifact context through AGY delegation, verification, remediation if needed, and archive.",
+      "expected_output": "A store-aware workflow that keeps the selected store sticky, follows the custom schema's reported context files, and never assumes repository-local OpenSpec paths or tasks.md.",
+      "files": [],
+      "expectations": [
+        "Runs openspec store list --json before selecting the named registered store.",
+        "Keeps --store platform-specs sticky across every applicable OpenSpec command used for selection, status, apply instructions, validation, verification, remediation, and archive.",
+        "Uses planningHome, changeRoot, actionContext, apply state, and contextFiles from CLI output.",
+        "Treats implementation.md as the task source because the custom schema reports it.",
+        "Provides the selected store and change identity to AGY without hardcoded repository-relative paths.",
+        "Keeps the same store selection through remediation and final archive."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Use the openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. AGY has settled with status `done` for approved change `fix-session-renewal` and claims all checks passed. OMP inspection finds a modified existing test with a weakened assertion. `/opsx-verify fix-session-renewal` reports one CRITICAL uncovered scenario, and the fresh project test command fails. Describe the required response. Assume the same AGY worker is still available and no credential or product decision is required.",
+      "expected_output": "A gated remediation response that rejects AGY's self-report, does not archive, sends concrete delta findings to the same worker, and repeats independent verification with a bounded stop condition.",
+      "files": [],
+      "expectations": [
+        "Treats AGY's success report as a claim rather than completion evidence.",
+        "Flags the weakened existing test before trusting the test result.",
+        "Does not sync or archive while the CRITICAL finding or fresh test failure remains.",
+        "Sends only the concrete verification findings to the same AGY worker conversation.",
+        "Re-runs both /opsx-verify and fresh project verification after remediation.",
+        "Stops after three failed rounds or an earlier repeated no-progress blocker while preserving the working tree."
+      ]
+    }
+  ]
+}
