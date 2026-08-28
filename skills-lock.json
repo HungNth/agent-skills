@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "agy-delegate": {
+      "source": "amelnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/agy-delegate/SKILL.md",
+      "computedHash": "41301193e773a60e9f257bf7ccc53a210c88e542502575144af09ba09081691d"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
+    },
+    "omp-delegate": {
+      "source": "amelnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/omp-delegate/SKILL.md",
+      "computedHash": "9e627f4f4f239f47e1314707e3718fe61604bdde308c6a2cb2f4bdcbe0505601"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "computedHash": "5ea13a6d9f0d4bb694405d79acd00cadec0d21bb138c4dd10fcf3c500cb835c2"
+    }
+  }
+}
