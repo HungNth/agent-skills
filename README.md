@@ -27,7 +27,7 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nod
 ```
 
 ```bash
-npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery --agent universal --copy -y
+npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery -y
 ```
 
 Install this orchestration skill for OMP only. Do not install or invoke it as an AGY implementation skill.
