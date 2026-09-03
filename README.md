@@ -11,6 +11,8 @@ Custom skills currently available in this repo:
 
 ```text
 skills/
+├─ flow-launcher-nodejs-plugin/
+├─ openspec-agy-delivery/
 └─ photoshop-uxp-scripting/
 ```
 
@@ -25,14 +27,25 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nod
 ```
 
 ```bash
-npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery -y
+npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery --agent universal --copy -y
+```
+
+Install this orchestration skill for OMP only. Do not install or invoke it as an AGY implementation skill.
+
+Use OpenSpec planning first, then send a separate delivery request after reviewing the artifacts:
+
+```text
+/opsx-explore
+/opsx-propose <change>
+
+Deliver <change> through openspec-agy-delivery.
 ```
 
 ---
 
 ## Useful skills
 
-### Must have skills for all agents:
+### Optional supporting skills
 
 - Install **Global** Skills:
 
@@ -40,14 +53,13 @@ npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-deli
 npx skills add https://github.com/github/awesome-copilot --skill create-readme -g -y
 ```
 
-- Use [Superpowers](https://github.com/obra/superpowers) with [OpenSpec](https://github.com/Fission-AI/OpenSpec)
+- Optionally use [Superpowers](https://github.com/obra/superpowers) with [OpenSpec](https://github.com/Fission-AI/OpenSpec). The delivery workflow does not require these skills.
 
 ```bash
 
 npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
 npx skills add https://github.com/obra/superpowers --skill test-driven-development -y
 npx skills add https://github.com/obra/superpowers --skill systematic-debugging -y
-npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
 npx skills add https://github.com/obra/superpowers --skill receiving-code-review -y
 npx skills add https://github.com/obra/superpowers --skill verification-before-completion -y
 

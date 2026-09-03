@@ -1,0 +1,12 @@
+{
+  "eval_id": 5,
+  "eval_name": "worker-brief",
+  "prompt": "Use the assigned openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. You are OMP inside Herdr and the user separately approved delivery of ready change `add-search`. Required CLIs and AGY authentication are available. The project has no Superpowers skills installed. Describe the worker launch, the complete implementation brief constraints, and the exact independent OMP verification that follows the worker report.",
+  "assertions": [
+    "Starts AGY through Herdr with --model gemini-3.8-flash-high --effort high after the native argument separator.",
+    "Identifies AGY as the implementation worker rather than the delivery orchestrator.",
+    "Requires openspec-apply-change and explicitly forbids openspec-agy-delivery inside the worker brief.",
+    "Requires the worker to read root AGENTS.md and every OpenSpec contextFiles path.",
+    "Treats missing Superpowers skills as optional and still reaches /opsx-verify plus fresh project checks."
+  ]
+}

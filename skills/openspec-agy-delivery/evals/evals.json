@@ -42,6 +42,55 @@
         "Re-runs both /opsx-verify and fresh project verification after remediation.",
         "Stops after three failed rounds or an earlier repeated no-progress blocker while preserving the working tree."
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "Use the assigned openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. You are the AGY implementation worker, not OMP. OMP has asked you to implement approved change `add-search`, and the shared authoring repository makes openspec-agy-delivery discoverable. Describe what the skill requires you to do next.",
+      "expected_output": "A fail-closed response that refuses to orchestrate or create another AGY worker and redirects this worker to the OpenSpec apply workflow for the named change.",
+      "files": [],
+      "expectations": [
+        "Stops before any Herdr pane split, agent start, agent prompt, or other delivery mutation.",
+        "States that openspec-agy-delivery is owned by an OMP orchestrator and must not run inside AGY.",
+        "Directs the AGY worker to use openspec-apply-change for add-search.",
+        "Does not produce a nested delivery or delegation command sequence."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Use the assigned openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. You are OMP inside Herdr and the user separately approved delivery of ready change `add-search`. Required CLIs and AGY authentication are available. The project has no Superpowers skills installed. Describe the worker launch, the complete implementation brief constraints, and the exact independent OMP verification that follows the worker report.",
+      "expected_output": "An OMP-owned delivery path that launches the explicit Gemini Flash High model, gives AGY an apply-only worker brief, continues without optional Superpowers skills, and preserves independent OMP verification.",
+      "files": [],
+      "expectations": [
+        "Starts AGY through Herdr with --model gemini-3.8-flash-high --effort high after the native argument separator.",
+        "Identifies AGY as the implementation worker rather than the delivery orchestrator.",
+        "Requires openspec-apply-change and explicitly forbids openspec-agy-delivery inside the worker brief.",
+        "Requires the worker to read root AGENTS.md and every OpenSpec contextFiles path.",
+        "Treats missing Superpowers skills as optional and still reaches /opsx-verify plus fresh project checks."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Use the assigned openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. You are OMP inside Herdr delivering one approved change with one AGY worker. The existing repository working tree contains no unrelated changes, and the user did not request a worktree. Explain the required workspace and prerequisite decisions.",
+      "expected_output": "A deterministic single-worker path that uses the attributable existing working tree, does not add undeclared skill dependencies, and reserves worktrees for explicit authorization or approved concurrency.",
+      "files": [],
+      "expectations": [
+        "Uses the existing repository working tree after the dirty-tree attribution preflight passes.",
+        "Does not create a worktree, workspace, tab, or alternate cwd without explicit authorization.",
+        "Lists Herdr, AGY, OpenSpec, git, and AGY authentication as required delivery prerequisites.",
+        "Does not fail because optional TDD, debugging, review, verification, or worktree skills are unavailable."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Run this as a read-only integration evaluation in a fresh OMP session rooted at the repository. Resolve `skill://openspec-agy-delivery`, report its resolved file path, and inspect the loaded body for the OMP-only role guard. Do not modify files or execute a delivery.",
+      "expected_output": "Fresh OMP resolves the installed project skill from `.agents/skills/openspec-agy-delivery/SKILL.md` and confirms that AGY is redirected to the exact `openspec-apply-change` workflow.",
+      "files": [],
+      "expectations": [
+        "A fresh OMP session successfully resolves skill://openspec-agy-delivery.",
+        "The resolved path is `.agents/skills/openspec-agy-delivery/SKILL.md` under the repository.",
+        "The loaded skill contains an OMP-only role preflight.",
+        "The role guard names openspec-apply-change exactly as the AGY fallback and stops before delivery or Herdr mutation."
+      ]
     }
   ]
 }

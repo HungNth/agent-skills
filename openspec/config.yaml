@@ -38,15 +38,15 @@ rules:
 operations:
     apply:
         guidance:
-            - Before modifying code, use Superpowers using-git-worktrees when an isolated workspace is not already active.
+            - For the default single-worker path, use the existing repository working tree only after the dirty-tree attribution preflight passes; create a worktree only when the user explicitly authorizes one or an approved concurrent-worker topology requires it.
             - Keep implementation aligned with the current specs, design, and tasks.
             - If implementation reveals that an artifact is incorrect or incomplete, update the artifact before continuing instead of silently deviating from it.
-            - Use Superpowers test-driven-development for behavior changes when applicable.
-            - Use Superpowers systematic-debugging for test failures, bugs, build failures, or unexpected behavior.
+            - For behavior changes, add the smallest meaningful failing check before implementation when practical.
+            - Investigate test failures, bugs, build failures, and unexpected behavior systematically from their root cause.
             - Do not mark a task complete until its stated verification has passed with fresh evidence.
             - Do not silently absorb new scope discovered during implementation; surface it and update the change artifacts first.
-            - After implementation, use Superpowers requesting-code-review when available and resolve important findings.
-            - Use Superpowers verification-before-completion before claiming the implementation is complete.
+            - For substantial changes, use an available reviewer after implementation and resolve important findings.
+            - Run fresh targeted verification and the changed behavior on its real surface before claiming completion.
 
     archive:
         guidance:

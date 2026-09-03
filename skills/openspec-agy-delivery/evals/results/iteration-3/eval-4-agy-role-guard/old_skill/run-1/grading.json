@@ -1,0 +1,74 @@
+{
+  "expectations": [
+    {
+      "text": "Stops before any Herdr pane split, agent start, agent prompt, or other delivery mutation.",
+      "passed": true,
+      "evidence": "The output explicitly states, \"In this dry run, no commands have been executed and no files have been modified,\" and describes only hypothetical next steps. It also assigns the Herdr lifecycle to OMP rather than initiating it."
+    },
+    {
+      "text": "States that openspec-agy-delivery is owned by an OMP orchestrator and must not run inside AGY.",
+      "passed": true,
+      "evidence": "The output substantively states this ownership and boundary: \"As the AGY implementation worker, I should not run the OMP orchestration workflow myself\" and \"OMP owns preflight, Herdr lifecycle, independent verification, remediation decisions, spec synchronization, and archive.\" Although it does not use the literal workflow name, it clearly says the OMP orchestration workflow is OMP-owned and must not be run by the AGY worker."
+    },
+    {
+      "text": "Directs the AGY worker to use openspec-apply-change for add-search.",
+      "passed": false,
+      "evidence": "The output directs the worker to obtain \"OpenSpec apply instructions for exactly `add-search`,\" but it never explicitly directs the worker to use `openspec-apply-change`. The generic reference to apply instructions is insufficient to establish use of that specific workflow or command."
+    },
+    {
+      "text": "Does not produce a nested delivery or delegation command sequence.",
+      "passed": true,
+      "evidence": "The output provides implementation guidance but no nested delivery or delegation command sequence. It expressly says the AGY worker should not run OMP orchestration, should return a report to OMP, and confirms that no commands were executed."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The dry run performed no commands or file modifications.",
+      "type": "output-supported",
+      "verified": true,
+      "evidence": "Explicit statement: \"In this dry run, no commands have been executed and no files have been modified.\""
+    },
+    {
+      "claim": "OMP, not the AGY implementation worker, owns the orchestration workflow and Herdr lifecycle.",
+      "type": "output-supported",
+      "verified": true,
+      "evidence": "Explicit statements: \"I should not run the OMP orchestration workflow myself\" and \"OMP owns preflight, Herdr lifecycle...\""
+    },
+    {
+      "claim": "The AGY worker is directed to use openspec-apply-change for add-search.",
+      "type": "unsupported",
+      "verified": false,
+      "evidence": "The output mentions \"OpenSpec apply instructions\" for `add-search` but does not name or clearly require `openspec-apply-change`."
+    },
+    {
+      "claim": "No nested delivery or delegation command sequence is produced.",
+      "type": "output-supported",
+      "verified": true,
+      "evidence": "No delivery/delegation commands are present; all steps remain implementation guidance bounded by OMP ownership."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Directs the AGY worker to use openspec-apply-change for add-search.",
+        "reason": "Add an explicit instruction such as: \"Run `openspec-apply-change` for exactly `add-search`.\" The current generic phrase \"OpenSpec apply instructions\" does not clearly identify the required workflow."
+      }
+    ],
+    "overall": "3 of 4 expectations pass. The dry run correctly avoids mutations and nested orchestration, and it clearly preserves OMP ownership. It fails only because it does not explicitly direct the AGY worker to use `openspec-apply-change` for `add-search`."
+  },
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  },
+  "execution_metrics": {
+    "output_chars": 2223,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 14.858,
+    "grader_duration_seconds": 17.766,
+    "total_duration_seconds": 32.624
+  }
+}

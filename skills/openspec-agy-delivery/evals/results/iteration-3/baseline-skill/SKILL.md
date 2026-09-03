@@ -1,18 +1,12 @@
 ---
 name: openspec-agy-delivery
-description: Deliver an explicitly approved OpenSpec change by having OMP coordinate an Antigravity CLI worker through Herdr, then independently verify, remediate, synchronize specs, and archive. Use only when the current agent is OMP and the user asks to implement, apply, ship, or deliver an approved OpenSpec change through AGY or Antigravity. Never use inside an AGY implementation worker, during explore or proposal work, before separate post-planning approval, or for small tasks the user wants OMP to implement directly.
+description: Deliver an explicitly approved OpenSpec change by having OMP coordinate an Antigravity CLI worker through Herdr, then independently verify, remediate, synchronize specs, and archive. Use whenever the user asks to implement, apply, ship, or deliver an approved OpenSpec change through AGY or Antigravity. Do not use during explore or proposal work, before a separate post-planning approval, or for small tasks the user wants OMP to implement directly.
 compatibility: Requires OMP running inside Herdr with the herdr, agy, openspec, and git CLIs installed; AGY must be authenticated. Supports native Windows, macOS, and Linux hosts supported by those tools.
 ---
 
 # OpenSpec AGY Delivery
 
 Deliver one approved OpenSpec change end to end. OpenSpec artifacts define the work; AGY implements it; Herdr owns terminal and agent lifecycle; OMP owns judgment, verification, remediation, spec synchronization, and archive.
-
-## Agent-role preflight
-
-This is an OMP orchestration workflow, never an AGY implementation workflow. Before any OpenSpec command or Herdr mutation, confirm that the current runtime identifies this agent as OMP and that `HERDR_ENV` is `1`. Skill availability, repository location, or an implementation request does not prove the OMP role.
-
-If the current agent is AGY or cannot confirm that it is OMP, stop without splitting a pane, starting or prompting an agent, or running the delivery lifecycle. Reply with the exact literal skill name `openspec-apply-change` as the required workflow for the named change; do not replace it with a path, link label, or generic `SKILL.md`. State that `openspec-agy-delivery` is OMP-owned.
 
 ## Approval boundary
 
@@ -74,19 +68,17 @@ Apply relevant runtime `context` and compatible `operationGuidance`. They do not
 
 Confirm all of the following before delegation:
 
-1. The agent-role preflight confirmed OMP, and OMP is inside Herdr with `HERDR_ENV=1`.
+1. OMP is inside Herdr: read `HERDR_ENV` through the host environment interface and require value `1`.
 2. `herdr --help`, `agy help`, `agy models`, `openspec --help`, and `git --version` succeed.
 3. AGY is authenticated. Resolve the repository root with `git rev-parse --show-toplevel` and keep the returned absolute path for every cwd-sensitive Herdr operation.
 4. The selected change is valid and apply state is `ready` or `all_done`; start AGY only for `ready`.
 5. The working tree can be attributed safely.
 
-These are the required runtime prerequisites: Herdr, AGY, OpenSpec, git, and AGY authentication. Supplemental TDD, debugging, review, verification, or worktree skills may be used when installed and applicable, but their absence never blocks delivery; follow the explicit checks in this workflow instead.
-
 Inspect tracked, staged, and untracked changes. On a fresh delivery, pre-existing changes may remain only inside the selected `changeRoot`. If unrelated paths are already dirty, stop and list them; never clean, reset, stash, switch branches, or overwrite user work.
 
 When explicitly continuing a partial delivery, treat existing implementation edits as baseline only when repository evidence ties them to the same selected change. If attribution is uncertain, stop.
 
-Discover the project's exact lint, typecheck, test, build, and behavioral smoke commands from root `AGENTS.md`, repository instructions, documentation, and manifests. Do not ask AGY to guess them.
+Discover the project's exact lint, typecheck, test, build, and behavioral smoke commands from repository instructions, documentation, and manifests. Do not ask AGY to guess them.
 
 ## 3. Start a dedicated AGY worker through Herdr
 
@@ -98,7 +90,7 @@ herdr pane layout --current
 herdr agent list
 ```
 
-Prefer a new worker for each delivery. Derive a valid name matching Herdr's agent name format `[a-z][a-z0-9_-]{0,31}` (lowercase alphanumeric, hyphen, underscore, up to 32 characters, e.g. `agy-<change>`), and add a short suffix on collision. Reuse a worker only when it was created earlier in this same delivery; remediation must keep that conversation.
+Prefer a new worker for each delivery. Derive a valid name from `agy-<change>`, truncate it to Herdr's limit, and add a short suffix on collision. Reuse a worker only when it was created earlier in this same delivery; remediation must keep that conversation.
 
 Choose the split direction from the current geometry: split a wide pane right, otherwise split down. Preserve the repository root and user focus:
 
@@ -106,31 +98,22 @@ Choose the split direction from the current geometry: split a wide pane right, o
 herdr pane split --current --direction <right|down> --cwd <repository-root> --no-focus
 ```
 
-Read the new pane id from `.result.pane.pane_id`, then start AGY with explicit model and reasoning effort passed after `--` (Herdr passes native agent arguments only after `--`):
+Read the new pane id from `.result.pane.pane_id`, then start AGY:
 
 ```text
-herdr agent start <worker-name> --kind agy --pane <pane-id> -- --model gemini-3.8-flash-high --effort high
+herdr agent start <worker-name> --kind agy --pane <pane-id>
 ```
 
-If the user requested a specific model or provider, substitute that model from `agy models`. Otherwise, default to `gemini-3.8-flash-high` with `--effort high`.
-
-Use the existing repository working tree for the default single-worker path after the attribution preflight passes. Do not create another workspace, tab, worktree, or cwd unless the user explicitly requested that topology or an approved concurrent-worker topology requires it.
+Do not create another workspace, tab, worktree, or cwd unless the user explicitly requested that topology.
 
 ## 4. Send a self-contained implementation brief
 
 AGY has a separate conversation. Include every load-bearing fact in one compact brief:
 
 ```xml
-<role>
-You are the AGY implementation worker, not the OMP delivery orchestrator.
-Use the workflow named exactly openspec-apply-change for the named change; do not describe it only as SKILL.md.
-Never invoke openspec-agy-delivery or create another AGY worker.
-</role>
-
 <task>
 Implement the approved OpenSpec change: <change>.
 Use the selected store: <store-id or none>.
-Read root AGENTS.md for shared project policy.
 Run OpenSpec status and apply instructions for that exact change and store.
 Read every path returned in contextFiles and follow the dynamic apply instruction.
 Implement every remaining task until all are complete or you are blocked.
@@ -230,8 +213,6 @@ Archive only when:
 Then follow the installed `openspec-archive-change` workflow for the exact change and selected store. Use its recommended spec synchronization when delta specs require it. OMP performs synchronization and archive; AGY never does.
 
 Do not commit unless the user separately requests a commit.
-
-After archive or upon terminating the delivery, optionally close the worker pane (`herdr pane close <pane-id>`) to free resources, unless the user wants to retain terminal output for inspection.
 
 ## 9. Report the outcome
 

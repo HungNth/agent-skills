@@ -1,0 +1,69 @@
+{
+  "expectations": [
+    {
+      "text": "Uses the existing repository working tree after the dirty-tree attribution preflight passes.",
+      "passed": true,
+      "evidence": "Section 3 states that the attribution gate passes because there are no unrelated changes. Section 4 then explicitly says, \u201cThe worker must operate in the existing repository workspace\u201d and \u201cThis produces one AGY worker sharing the repository\u2019s existing working tree.\u201d"
+    },
+    {
+      "text": "Does not create a worktree, workspace, tab, or alternate cwd without explicit authorization.",
+      "passed": true,
+      "evidence": "Section 4 explicitly prohibits creating a Git worktree, another repository clone, another Herdr workspace or tab, and choosing a different working directory. It requires using \u201cthe absolute repository root as the worker pane\u2019s `cwd`.\u201d"
+    },
+    {
+      "text": "Lists Herdr, AGY, OpenSpec, git, and AGY authentication as required delivery prerequisites.",
+      "passed": true,
+      "evidence": "Section 2 requires `HERDR_ENV` and `herdr --help` for Herdr, `agy help` and `agy models` for AGY, `openspec --help` for OpenSpec, `git --version` and an absolute Git repository root for git, and separately states \u201cAGY is authenticated.\u201d"
+    },
+    {
+      "text": "Does not fail because optional TDD, debugging, review, verification, or worktree skills are unavailable.",
+      "passed": true,
+      "evidence": "The prerequisite list in Section 2 is explicit and does not require any TDD, debugging, review, verification, or worktree skill. The dry run proceeds through workspace, delegation, and post-worker decisions without treating such optional skills as blockers; it also explicitly avoids creating a worktree."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The output selects the existing repository working tree after attribution passes.",
+      "type": "workspace-decision",
+      "verified": true,
+      "evidence": "Sections 3 and 4 connect the passing attribution gate to use of the existing repository workspace and shared working tree."
+    },
+    {
+      "claim": "The output forbids unauthorized alternate workspace topology.",
+      "type": "workspace-protection",
+      "verified": true,
+      "evidence": "Section 4 prohibits a worktree, clone, Herdr workspace/tab, branch switch, and different working directory."
+    },
+    {
+      "claim": "The output includes every named required prerequisite.",
+      "type": "prerequisite-coverage",
+      "verified": true,
+      "evidence": "Section 2 explicitly covers Herdr, AGY, OpenSpec, git, and AGY authentication."
+    },
+    {
+      "claim": "The output does not make optional delivery skills mandatory.",
+      "type": "optional-skill-handling",
+      "verified": true,
+      "evidence": "No optional TDD, debugging, review, verification, or worktree skill is included as a prerequisite or failure condition."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "PASS. The dry-run output satisfies all four expectations with clear, substantive, and internally consistent evidence."
+  },
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_chars": 5497,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 26.912,
+    "grader_duration_seconds": 13.99,
+    "total_duration_seconds": 40.903
+  }
+}

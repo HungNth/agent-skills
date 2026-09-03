@@ -1,0 +1,11 @@
+{
+  "eval_id": 4,
+  "eval_name": "agy-role-guard",
+  "prompt": "Use the assigned openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. You are the AGY implementation worker, not OMP. OMP has asked you to implement approved change `add-search`, and the shared authoring repository makes openspec-agy-delivery discoverable. Describe what the skill requires you to do next.",
+  "assertions": [
+    "Stops before any Herdr pane split, agent start, agent prompt, or other delivery mutation.",
+    "States that openspec-agy-delivery is owned by an OMP orchestrator and must not run inside AGY.",
+    "Directs the AGY worker to use openspec-apply-change for add-search.",
+    "Does not produce a nested delivery or delegation command sequence."
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "expectations": [
+    {
+      "text": "Starts AGY through Herdr with --model gemini-3.8-flash-high --effort high after the native argument separator.",
+      "passed": false,
+      "evidence": "The launch shown is `herdr agent start agy-add-search --kind agy --pane <new-pane-id>`. It does not include a native argument separator or the required `--model gemini-3.8-flash-high --effort high` arguments."
+    },
+    {
+      "text": "Identifies AGY as the implementation worker rather than the delivery orchestrator.",
+      "passed": true,
+      "evidence": "The output labels the delegated content `Complete AGY implementation brief`, directs AGY to implement all remaining approved tasks, and reserves independent verification, remediation control, synchronization, and archive for OMP (`OMP\u2014not AGY\u2014`). This clearly assigns AGY the implementation-worker role rather than delivery orchestration."
+    },
+    {
+      "text": "Requires openspec-apply-change and explicitly forbids openspec-agy-delivery inside the worker brief.",
+      "passed": false,
+      "evidence": "The worker brief discusses running OpenSpec status/apply instructions and following the apply workflow, but it never requires the named `openspec-apply-change` skill/workflow and never explicitly forbids `openspec-agy-delivery`."
+    },
+    {
+      "text": "Requires the worker to read root AGENTS.md and every OpenSpec contextFiles path.",
+      "passed": false,
+      "evidence": "The brief explicitly requires reading every path returned in `contextFiles`, including proposal, specs, design, tasks, and action-context files. However, it does not require AGY to read the repository-root `AGENTS.md`."
+    },
+    {
+      "text": "Treats missing Superpowers skills as optional and still reaches /opsx-verify plus fresh project checks.",
+      "passed": true,
+      "evidence": "The output states `Superpowers: not required by this delivery workflow`, then independently invokes `/opsx-verify add-search` and requires OMP to freshly rerun lint, typecheck, tests, build, repository-mandated validation, and a behavioral smoke scenario rather than relying on AGY's results."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The dry-run does not launch AGY with the required Gemini model and high-effort native arguments.",
+      "type": "expectation assessment",
+      "verified": true,
+      "evidence": "The only AGY start command lacks `--`, `--model gemini-3.8-flash-high`, and `--effort high`."
+    },
+    {
+      "claim": "The role split makes AGY the implementation worker and OMP the delivery controller/verifier.",
+      "type": "expectation assessment",
+      "verified": true,
+      "evidence": "AGY receives implementation tasks; OMP performs independent verification, controls remediation, and alone performs synchronization/archive."
+    },
+    {
+      "claim": "The worker brief omits the required named skill and prohibition.",
+      "type": "expectation assessment",
+      "verified": true,
+      "evidence": "Neither `openspec-apply-change` nor `openspec-agy-delivery` appears in the output."
+    },
+    {
+      "claim": "The worker is required to read contextFiles but not root AGENTS.md.",
+      "type": "expectation assessment",
+      "verified": true,
+      "evidence": "The brief says `Read every path returned in contextFiles`; no root `AGENTS.md` instruction appears."
+    },
+    {
+      "claim": "The workflow makes Superpowers nonmandatory while retaining formal and project-level verification.",
+      "type": "expectation assessment",
+      "verified": true,
+      "evidence": "It states Superpowers are not required and includes `/opsx-verify add-search` plus fresh canonical checks and behavioral smoke verification."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Add the required native AGY arguments to the Herdr launch.",
+        "reason": "The launch must place `--model gemini-3.8-flash-high --effort high` after Herdr's native argument separator."
+      },
+      {
+        "assertion": "State inside the AGY brief that the worker must use `openspec-apply-change`.",
+        "reason": "General references to the OpenSpec apply workflow do not substantively satisfy the named-skill requirement."
+      },
+      {
+        "assertion": "State inside the AGY brief that `openspec-agy-delivery` is forbidden.",
+        "reason": "The required explicit prohibition is absent."
+      },
+      {
+        "assertion": "Require AGY to read the repository-root `AGENTS.md` in addition to every `contextFiles` path.",
+        "reason": "Only the contextFiles half of the combined expectation is currently satisfied."
+      }
+    ],
+    "overall": "2 of 5 expectations pass. The output clearly establishes AGY as the implementation worker and preserves verification despite optional Superpowers, but it misses the mandated model/effort launch arguments, the named apply-skill requirement and delivery-skill prohibition, and the root AGENTS.md reading requirement."
+  },
+  "summary": {
+    "passed": 2,
+    "failed": 3,
+    "total": 5,
+    "pass_rate": 0.4
+  },
+  "execution_metrics": {
+    "output_chars": 11543,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 54.18,
+    "grader_duration_seconds": 21.381,
+    "total_duration_seconds": 75.561
+  }
+}

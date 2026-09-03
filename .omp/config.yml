@@ -1,0 +1,8 @@
+task:
+  eager: preferred
+  batch: true
+  enableEffort: false
+  maxConcurrency: 4
+  maxRecursionDepth: 1
+  prewalk: false
+  enableLsp: true

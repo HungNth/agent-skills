@@ -1,0 +1,63 @@
+{
+  "expectations": [
+    {
+      "text": "Stops before any Herdr pane split, agent start, agent prompt, or other delivery mutation.",
+      "passed": true,
+      "evidence": "The output explicitly says, \"I must not split panes, start another agent, or run the delivery lifecycle,\" and contains no delivery mutation."
+    },
+    {
+      "text": "States that openspec-agy-delivery is owned by an OMP orchestrator and must not run inside AGY.",
+      "passed": true,
+      "evidence": "The output states, \"`openspec-agy-delivery` is OMP-owned and must not be invoked by an AGY implementation worker.\""
+    },
+    {
+      "text": "Directs the AGY worker to use openspec-apply-change for add-search.",
+      "passed": true,
+      "evidence": "The output directs, \"Use the workflow named exactly `openspec-apply-change` for change `add-search`.\" In context, the following sentence identifies the intended actor as an AGY implementation worker."
+    },
+    {
+      "text": "Does not produce a nested delivery or delegation command sequence.",
+      "passed": true,
+      "evidence": "The output provides only a direct workflow instruction and a prohibition against splitting panes, starting another agent, or running delivery; it includes no nested delivery or delegation command sequence."
+    }
+  ],
+  "claims": [
+    {
+      "claim": "The required workflow is openspec-apply-change for change add-search.",
+      "type": "instruction",
+      "verified": true,
+      "evidence": "Explicitly stated in the first sentence of the output."
+    },
+    {
+      "claim": "openspec-agy-delivery is OMP-owned and must not be invoked by an AGY implementation worker.",
+      "type": "ownership-and-execution constraint",
+      "verified": true,
+      "evidence": "Explicitly stated in the second paragraph of the output."
+    },
+    {
+      "claim": "No pane split, agent start, or delivery lifecycle action should occur.",
+      "type": "execution constraint",
+      "verified": true,
+      "evidence": "Explicitly stated: \"I must not split panes, start another agent, or run the delivery lifecycle.\""
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "PASS. The dry-run output substantively satisfies all four expectations and avoids any nested delivery or delegation sequence."
+  },
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "output_chars": 250,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "executor_duration_seconds": 5.656,
+    "grader_duration_seconds": 10.184,
+    "total_duration_seconds": 15.84
+  }
+}
