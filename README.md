@@ -29,6 +29,7 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nod
 
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-csharp-plugin -y
+npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-plugin-dev -y
 ```
 
 ```bash
