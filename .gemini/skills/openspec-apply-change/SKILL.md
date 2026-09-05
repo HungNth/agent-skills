@@ -16,6 +16,8 @@ Implement tasks from an OpenSpec change.
 
 **Input**: Optionally specify a change name (e.g., `/opsx:apply add-auth`). If omitted, check if it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
 
+**Assigned task IDs (optional, orchestrator-supplied)**: When invoked from `openspec-agy-delivery`, the orchestrator passes a change name, store id (or none), and a list of assigned task IDs. The worker treats those IDs as the only tasks it may implement in this invocation. The orchestrator is the source of truth for the assignment; without it, the worker keeps the existing full-pending-task behavior described below.
+
 **Steps**
 
 1. **Select the change**
@@ -36,6 +38,14 @@ Implement tasks from an OpenSpec change.
    - `planningHome`, `changeRoot`, and `actionContext`: planning scope and edit constraints
    - Which artifact contains the tasks (typically "tasks" for spec-driven, check status for others)
 
+
+3a. **Validate any assigned task IDs**
+
+   If the orchestrator supplied assigned task IDs:
+
+   - Cross-check each ID against the schema-reported task list under the `tasks` key in the apply JSON. Missing, already-complete, or out-of-change IDs are blockers; report the exact mismatch and stop without implementing.
+   - Treat the schema-reported path for the `tasks` artifact (under `contextFiles`) as the only task file. Do not hardcode, alias, or substitute `tasks.md` when the schema reports a different path.
+   - Restrict this invocation to the assigned IDs. Even when OpenSpec still reports `state: ready`, do not implement unassigned tasks.
 3. **Get apply instructions**
 
    ```bash
@@ -82,21 +92,18 @@ Implement tasks from an OpenSpec change.
 
 5. **Show current progress**
 
-   Display:
-   - Schema being used
-   - Progress: "N/M tasks complete"
-   - Remaining tasks overview
-   - Dynamic instruction from CLI
-
 6. **Implement tasks (loop until done or blocked)**
 
-   For each pending task:
+   Determine the active task set:
+
+   - If the orchestrator supplied assigned task IDs, the active set is exactly those IDs (already validated in step 3a). Implement only those tasks, mark only their checkboxes, and do not modify any other task or its marker.
+   - Otherwise the active set is every pending task the schema reports.
+
+   For each task in the active set:
    - Show which task is being worked on
    - Make the code changes required
    - Keep changes minimal and focused
-   - Mark task complete in the tasks file: `- [ ]` → `- [x]`
-   - Continue to next task
-
+   - Mark task complete in the schema-reported task file: `- [ ]` → `- [x]`
    **Pause if:**
    - Task is unclear → ask for clarification
    - Implementation reveals a design issue → suggest updating artifacts
@@ -107,12 +114,11 @@ Implement tasks from an OpenSpec change.
 7. **On completion or pause, show status**
 
    Display:
-   - Tasks completed this session
-   - Overall progress: "N/M tasks complete"
-   - If all done: suggest archive
+   - Tasks completed this session (only the assigned IDs when an assignment was supplied)
+   - Overall progress: "N/M tasks complete" reflecting the schema-reported total, not just the active set
+   - Any remaining assigned tasks and any remaining pending tasks in the change
+   - If all done (and either assignment was absent or every assigned ID is complete): suggest archive
    - If paused: explain why and wait for guidance
-
-**Output During Implementation**
 
 ```
 ## Implementing: <change-name> (schema: <schema-name>)
