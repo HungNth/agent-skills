@@ -11,6 +11,7 @@ Custom skills currently available in this repo:
 
 ```text
 skills/
+├─ flow-launcher-csharp-plugin/
 ├─ flow-launcher-nodejs-plugin/
 ├─ openspec-agy-delivery/
 └─ photoshop-uxp-scripting/
@@ -24,6 +25,10 @@ npx skills add https://github.com/HungNth/agent-skills --skill photoshop-uxp-scr
 
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nodejs-plugin -y
+```
+
+```bash
+npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-csharp-plugin -y
 ```
 
 ```bash
