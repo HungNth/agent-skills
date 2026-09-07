@@ -83,12 +83,13 @@
     {
       "id": 7,
       "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Two concurrent AGY lane workers complete their tasks. Lane 1 modified `tasks.md` to check off `- [x] 1.1`, while Lane 2 left `tasks.md` untouched. Describe Pi's review of lane diffs, handling of lane task markers, local commit creation, integration order, and how authoritative task markers are updated on the integration branch.",
-      "expected_output": "Pi strips or rejects the lane's task-marker edit, verifies diff and test integrity, creates local commits for accepted code, integrates them in dependency order, and authorizes a single AGY integration worker to update authoritative task markers on the integration branch.",
+      "expected_output": "Pi rejects Lane 1 because it modified tasks.md outside its allowed implementation scope, refuses to silently check out or revert the file itself, and instructs the same AGY lane worker to revert tasks.md before proceeding. Pi integrates compliant Lane 2 code, and a single AGY integration worker on the integration branch updates authoritative task markers after verification.",
       "files": [],
       "expectations": [
         "Treats AGY lane completion reports as claims, not authoritative completion evidence.",
-        "Excludes lane-local edits to tasks.md from accepted implementation commits, keeping task markers single-writer.",
-        "Inspects lane diffs to ensure edits stay within allowed scope and tests are not weakened or deleted.",
+        "Rejects the lane containing tasks.md edits and refuses to integrate its changes.",
+        "Instructs the same AGY lane worker to revert its tasks.md modifications rather than having Pi silently check out or revert the file.",
+        "Inspects lane diffs to ensure edits stay strictly within assigned scope and tests are not weakened or deleted.",
         "Creates local commits for accepted lane work and integrates them into the integration branch in topological order.",
         "Authorizes a single AGY integration worker on the integration branch to verify integrated code and update authoritative task markers.",
         "Keeps all commits local without pushing to remote, merging to default branch (main/master), or opening a pull request."
@@ -122,13 +123,14 @@
     },
     {
       "id": 10,
-      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Verification for change `refactor-billing` passes. Pi initiates spec synchronization. The AGY lifecycle worker runs `openspec-sync-specs`. Pi evaluates the synchronization before authorizing archive. Explain the separate prompt gates, the `openspec validate --specs` validation check (carrying the store flag when applicable), what occurs if sync diverges, and the final archive audit.",
-      "expected_output": "Spec sync and archive are strictly separated prompts. Pi validates synchronized specs against deltas using `openspec validate --specs` with strict validation (including the store flag when applicable), withholds archive on divergence, and upon successful archive independently verifies that the change is archived and main specs remain valid.",
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. All implementation tasks and fresh read-only verification for change `refactor-billing` have passed on the integration branch. What happens next across the remaining post-implementation lifecycle? Describe the stages, who performs each action, how transitions are authorized, and what happens if spec changes diverge.",
+      "expected_output": "AGY performs spec synchronization and archive in separately authorized stages. Pi independently compares delta specs against main specs and runs `openspec validate --specs` (with the store flag when applicable). If synchronization diverges or validation fails, archive is withheld. AGY archives the change only after all gates pass, followed by Pi's audit.",
       "files": [],
       "expectations": [
         "Maintains spec synchronization and archive as separate serial stages with independent prompt gates.",
-        "Never issues a combined sync-and-archive prompt to AGY.",
-        "Verifies synchronized main specs against delta specs and runs strict specs validation using openspec validate --specs (with the store flag when applicable) before authorizing archive.",
+        "Requires AGY to perform spec synchronization and change archive in separately authorized stages rather than combining them into one prompt.",
+        "Pi independently compares delta specs against synchronized main specs to detect any divergence before authorizing archive.",
+        "Pi independently executes strict specs validation using `openspec validate --specs` (including `--store <id>` when applicable).",
         "Withholds archive authorization if sync diverges, fails, or produces validation errors, routing delta findings back to AGY.",
         "Authorizes AGY archive only after all gates pass, and performs a final audit confirming the change is moved to archive and working tree is clean."
       ]
@@ -149,8 +151,8 @@
     },
     {
       "id": 12,
-      "prompt": "Use the pi-openspec-agy-delivery skill to evaluate a complete bounded fixture-repository delivery scenario for change `add-telemetry-pipeline`. The fixture contains: Task 1 (metrics collector in `telemetry/collector.ts`), Task 2 (event schema validator in `telemetry/validator.ts`), and Task 3 (telemetry pipeline coordinator in `telemetry/pipeline.ts` consuming collector and validator). Tasks 1 and 2 are independent; Task 3 depends on both. Trace the entire post-planning lifecycle with observable expected branches, worktrees, worker roles, gates, spec sync, archive, and cleanup. Include explicit safety constraints prohibiting credentials, remote push, deployment, permission bypass, and destructive cleanup.",
-      "expected_output": "A comprehensive bounded delivery execution tracing Wave 1 parallel lanes, Wave 2 dependent lane, integration commits, fresh read-only verification, spec sync, archive, and non-force cleanup, with strict negative assertions forbidding credentials, remote push, deployment, permission bypass, and destructive cleanup.",
+      "prompt": "Use the pi-openspec-agy-delivery skill to evaluate a complete bounded fixture-repository delivery scenario for change `add-telemetry-pipeline`. The fixture contains: Task 1 (metrics collector in `telemetry/collector.ts`), Task 2 (event schema validator in `telemetry/validator.ts`), and Task 3 (telemetry pipeline coordinator in `telemetry/pipeline.ts` consuming collector and validator). Tasks 1 and 2 are independent; Task 3 depends on both. Trace the entire post-planning delivery lifecycle from wave scheduling through integration, verification, spec sync, archive, and cleanup, detailing the observable branches, worktrees, worker roles, gates, and operational boundaries.",
+      "expected_output": "A comprehensive bounded delivery execution tracing Wave 1 parallel lanes, Wave 2 dependent lane, integration commits, fresh read-only verification, spec sync, archive, and non-force cleanup, with strict independent avoidance of credentials, remote push, deployment, permission bypass/model escalation, and destructive cleanup.",
       "files": [],
       "expectations": [
         "Executes Wave 1 with independent Tasks 1 and 2 running concurrently in isolated worktrees and branches agy/add-telemetry-pipeline/lane-collector and agy/add-telemetry-pipeline/lane-validator.",
