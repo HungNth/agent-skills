@@ -33,8 +33,10 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-csh
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-plugin-dev -y
 ```
 
+- OMP
+
 ```bash
-npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery -y
+npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery -a omp -y
 ```
 
 Install this orchestration skill for OMP only. Do not install or invoke it as an AGY implementation skill.
@@ -47,6 +49,8 @@ Use OpenSpec planning first, then send a separate delivery request after reviewi
 
 Deliver <change> through openspec-agy-delivery.
 ```
+
+- Pi
 
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill pi-openspec-agy-delivery -a pi -y
