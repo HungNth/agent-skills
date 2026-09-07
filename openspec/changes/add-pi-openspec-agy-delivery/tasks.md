@@ -32,7 +32,7 @@
 
 ## 6. Final Verification
 
-- [ ] 6.1 Run structural validation on both skill copies, validate the evaluation JSON, confirm `agy models` contains `gemini-3.8-flash-high`, and verify the documented Herdr AGY startup arguments without starting an unapproved delivery.
+- [x] 6.1 Run structural validation on both skill copies, validate the evaluation JSON, confirm `agy models` contains `gemini-3.8-flash-high`, and verify the documented Herdr AGY startup arguments without starting an unapproved delivery.
 - [ ] 6.2 Review the complete change against every requirement in `specs/pi-openspec-agy-delivery/spec.md`, inspect for weakened tests, recursive orchestration, shared-writer paths, unsafe git commands, permission bypass, automatic push or model escalation, and resolve every blocking finding.
-- [ ] 6.3 Verify the existing canonical and installed `openspec-agy-delivery` files remain unchanged, the new canonical and Pi copies are byte-identical, tracked evaluations are present despite the general eval ignore rule, and no scheduler helper or runtime dependency was added.
-- [ ] 6.4 Run `openspec validate add-pi-openspec-agy-delivery --type change --strict --no-interactive` and verify the change is valid and all implementation tasks remain unchecked until the separately authorized delivery phase.
+- [x] 6.3 Verify the existing canonical and installed `openspec-agy-delivery` files remain unchanged, the new canonical and Pi copies are byte-identical, tracked evaluations are present despite the general eval ignore rule, and no scheduler helper or runtime dependency was added.
+- [x] 6.4 Run `openspec validate add-pi-openspec-agy-delivery --type change --strict --no-interactive` and verify the change is valid and all implementation tasks remain unchecked until the separately authorized delivery phase.
