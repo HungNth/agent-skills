@@ -18,9 +18,9 @@
 
 ## 4. Behavioral Evaluation
 
-- [ ] 4.1 Run every evaluation as with-skill and no-skill baseline pairs in the same batch, save outputs, metadata, and timing under `skills/pi-openspec-agy-delivery-workspace/iteration-1/`, and verify every run directory contains the expected artifacts.
-- [ ] 4.2 Grade each run against objective assertions, run `python -m scripts.aggregate_benchmark` from the skill-creator context, and verify `benchmark.json` and `benchmark.md` report per-case and aggregate pass rates for the exact skill revision.
-- [ ] 4.3 Generate the standard skill-creator review surface with `.agents/skills/skill-creator/eval-viewer/generate_review.py`, review trigger false positives and workflow omissions, and update the canonical and Pi-installed copies together if findings require correction; verify the final copies remain byte-identical after any revision.
+- [x] 4.1 Run every evaluation as with-skill and no-skill baseline pairs in the same batch, save outputs, metadata, and timing under `skills/pi-openspec-agy-delivery-workspace/iteration-1/`, and verify every run directory contains the expected artifacts.
+- [x] 4.2 Grade each run against objective assertions, run `python -m scripts.aggregate_benchmark` from the skill-creator context, and verify `benchmark.json` and `benchmark.md` report per-case and aggregate pass rates for the exact skill revision.
+- [x] 4.3 Generate the standard skill-creator review surface with `.agents/skills/skill-creator/eval-viewer/generate_review.py`, review trigger false positives and workflow omissions, and update the canonical and Pi-installed copies together if findings require correction; verify the final copies remain byte-identical after any revision.
 - [ ] 4.4 Exercise the bounded fixture-repository scenario without remote operations: verify independent task lanes run concurrently in separate worktrees, dependent work waits for its predecessor, Pi integrates accepted local commits, a fresh read-only AGY performs verification, AGY performs separately gated sync and archive, and only workflow-created successful resources are cleaned.
 
 ## 5. Failure and Recovery Validation
