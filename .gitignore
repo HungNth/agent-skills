@@ -1,3 +1,6 @@
 openspec-agy-delivery-workspace
 flow-launcher-csharp-plugin-workspace
 evals
+!skills/pi-openspec-agy-delivery/evals/
+skills/pi-openspec-agy-delivery/evals/*
+!skills/pi-openspec-agy-delivery/evals/evals.json

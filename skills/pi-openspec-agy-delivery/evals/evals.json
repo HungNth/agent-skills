@@ -1,0 +1,171 @@
+{
+  "skill_name": "pi-openspec-agy-delivery",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. The user has completed planning for change `add-oauth2-auth` and now instructs in Pi: 'Deliver the approved OpenSpec change add-oauth2-auth using AGY workers.' The repository working tree is clean on branch `feature/auth-prep`. Prerequisite CLIs (pi, herdr, agy, openspec, git) and AGY authentication are available. Detail the exact trigger acceptance, preflight checks, and initial integration branch handling.",
+      "expected_output": "A positive trigger execution that confirms the Pi orchestrator role, validates separate post-planning authorization, checks runtime prerequisites and dirty-tree attribution, and selects or establishes the safe local integration branch without pushing or merging.",
+      "files": [],
+      "expectations": [
+        "Positively triggers pi-openspec-agy-delivery in response to an explicit post-planning delivery request for an approved OpenSpec change.",
+        "Validates that planning artifacts (proposal, specs, design, tasks) are complete and change is approved before initiating delivery.",
+        "Confirms current agent role is Pi and stops if invoked inside AGY or another orchestrator.",
+        "Verifies runtime prerequisites: Pi, Herdr, AGY CLI, OpenSpec CLI, git, AGY authentication, and configured model gemini-3.8-flash-high.",
+        "Runs dirty-tree preflight to verify uncommitted changes are attributable to the change, stopping without modifying or stashing user work if unattributable changes exist.",
+        "Uses the safe non-default feature branch feature/auth-prep as the integration branch, creating no remote push or pull request."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Evaluate negative trigger boundaries for pi-openspec-agy-delivery across four user requests: (1) 'Use /opsx-explore to investigate caching strategies for user sessions', (2) 'Propose a new change add-jwt-session with /opsx-propose', (3) 'Refactor the database connection pool in src/db.ts to use singleton pattern', and (4) An OMP orchestrator session asking to implement change `cache-layer`. Explain why pi-openspec-agy-delivery must refuse or not trigger for each case.",
+      "expected_output": "Clear rejection or non-triggering for planning workflows (/opsx-explore, /opsx-propose), ad-hoc non-OpenSpec coding tasks, and OMP orchestrator sessions.",
+      "files": [],
+      "expectations": [
+        "Does not trigger on OpenSpec explore or propose workflows (/opsx-explore, /opsx-propose), enforcing the strict post-planning boundary.",
+        "Does not automatically start implementation during or immediately following artifact proposal generation.",
+        "Does not trigger on ad-hoc implementation or refactoring requests that do not target an approved OpenSpec change.",
+        "Refuses orchestration when executed by OMP, directing OMP to openspec-agy-delivery instead.",
+        "Stops before creating branches, worktrees, panes, or AGY workers for all negative trigger cases."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. An AGY worker tasked with implementing a subtask discovers `skills/pi-openspec-agy-delivery/SKILL.md` in the workspace and receives a prompt containing 'pi-openspec-agy-delivery: deliver change add-user-search'. Describe the skill's role preflight, immediate behavior, and redirection.",
+      "expected_output": "A fail-closed role preflight that prevents AGY from acting as orchestrator, creates no child workers or panes, and redirects AGY to the openspec-apply-change workflow.",
+      "files": [],
+      "expectations": [
+        "Executes a fail-closed role preflight check that evaluates harness context and rejects execution under AGY.",
+        "Does not rely solely on inherited environment variables that child AGY processes might share.",
+        "Prevents AGY from recursively spawning workers, creating Herdr panes, or orchestrating delivery.",
+        "Directs the AGY worker to use the exact openspec-apply-change workflow for its assigned change.",
+        "Stops immediately without mutating delivery state, branches, worktrees, or OpenSpec artifacts."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. The user requests delivery of approved change `rotate-keys` residing in registered standalone store `security-vault`. Describe how Pi resolves the store and change status, and how the `--store security-vault` argument is propagated through planning resolution, worker briefs, verification, sync, and archive.",
+      "expected_output": "A sticky store resolution workflow that verifies `security-vault` via store list, discovers dynamic paths, and appends `--store security-vault` to all OpenSpec commands and worker briefs without fallback to repository-local paths.",
+      "files": [],
+      "expectations": [
+        "Discovers registered stores using openspec store list --json before validating the named store.",
+        "Treats --store security-vault as sticky across all OpenSpec commands for status, instructions, apply, verify, sync, and archive.",
+        "Derives planningHome, changeRoot, actionContext, and contextFiles dynamically from CLI output rather than assuming repository-local paths.",
+        "Includes --store security-vault in every AGY worker brief so worker commands operate on the correct store.",
+        "Preserves the sticky store flag through verification, remediation cycles, and final archive."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Pi is scheduling an approved OpenSpec change with four tasks: Task 1 (add user schema in `src/schema/user.ts`), Task 2 (add product schema in `src/schema/product.ts`), Task 3 (generate unified API client consuming user and product schemas in `src/client/api.ts`), and Task 4 (modify shared database migration runner `src/db/migrate.ts` where overlap with schema migrations is uncertain). Explain the dependency graph construction, wave partitioning, and execution order.",
+      "expected_output": "A conservative dependency-aware schedule that runs independent Tasks 1 and 2 in Wave 1, serializes uncertain Task 4 rather than guessing independence, and executes dependent Task 3 in Wave 3 only after upstream dependencies are integrated.",
+      "files": [],
+      "expectations": [
+        "Derives a task dependency graph from explicit task wording, design decisions, symbols, file paths, and migration contracts.",
+        "Identifies Tasks 1 and 2 as independent non-overlapping tasks and schedules them in parallel execution Wave 1.",
+        "Serializes Task 4 into a separate wave because potential migration overlap cannot be proven safe and independent.",
+        "Schedules dependent Task 3 in a later wave that executes only after Tasks 1 and 2 are accepted and integrated on the integration branch.",
+        "Refuses to guess independence when contracts, schemas, or file overlaps are ambiguous or uncertain."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. A change has four ready independent tasks. The user explicitly requests: 'Deliver change add-widgets with concurrency capped at 2 workers.' Describe worker count calculation, branch naming, git worktree creation, Herdr pane allocation, and AGY invocation flags.",
+      "expected_output": "Execution that honors the user's concurrency override of 2 as an upper bound, creates dedicated per-lane branches and worktrees from integration HEAD, allocates background Herdr panes, and launches AGY with `gemini-3.8-flash-high --effort high`.",
+      "files": [],
+      "expectations": [
+        "Treats the user-specified limit of 2 as an upper bound and caps active concurrent workers at 2 instead of default 3.",
+        "Creates a unique branch agy/<change>/<lane> from integration branch HEAD for each concurrent lane.",
+        "Allocates a dedicated git worktree for each active worker so no two writers share a working directory.",
+        "Allocates or splits a dedicated background Herdr pane rooted at each lane's worktree.",
+        "Launches each AGY worker using --model gemini-3.8-flash-high --effort high with isolated conversation context."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Two concurrent AGY lane workers complete their tasks. Lane 1 modified `tasks.md` to check off `- [x] 1.1`, while Lane 2 left `tasks.md` untouched. Describe Pi's review of lane diffs, handling of lane task markers, local commit creation, integration order, and how authoritative task markers are updated on the integration branch.",
+      "expected_output": "Pi strips or rejects the lane's task-marker edit, verifies diff and test integrity, creates local commits for accepted code, integrates them in dependency order, and authorizes a single AGY integration worker to update authoritative task markers on the integration branch.",
+      "files": [],
+      "expectations": [
+        "Treats AGY lane completion reports as claims, not authoritative completion evidence.",
+        "Excludes lane-local edits to tasks.md from accepted implementation commits, keeping task markers single-writer.",
+        "Inspects lane diffs to ensure edits stay within allowed scope and tests are not weakened or deleted.",
+        "Creates local commits for accepted lane work and integrates them into the integration branch in topological order.",
+        "Authorizes a single AGY integration worker on the integration branch to verify integrated code and update authoritative task markers.",
+        "Keeps all commits local without pushing to remote, merging to default branch (main/master), or opening a pull request."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. All tasks for change `add-payment-gateway` are integrated on `delivery/add-payment-gateway`. Pi initiates verification. The verifier flags a critical security issue in token handling. The responsible AGY worker remediates the code. Describe the verifier setup, independent Pi project gates, and how the subsequent verification cycle is conducted.",
+      "expected_output": "Verification uses a fresh read-only AGY verifier in `--mode plan` running `openspec-verify-change`. Pi runs its own independent test and lint gates. After remediation edits code, Pi spawns a brand-new fresh read-only AGY verifier rather than reusing the old session.",
+      "files": [],
+      "expectations": [
+        "Launches a fresh AGY verifier in read-only mode (--mode plan) to perform openspec-verify-change.",
+        "Ensures the verifier cannot mutate project files and cannot transition into a write-capable lifecycle worker.",
+        "Reruns Pi's independent project gates (lint, typecheck, tests, build) in addition to OpenSpec verification.",
+        "Routes the exact CRITICAL finding to the responsible AGY lane worker without Pi writing code fixes.",
+        "Launches a brand-new fresh read-only AGY verifier session after remediation modifies code, avoiding self-review and anchoring bias."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Evaluate two remediation scenarios: (1) An AGY worker fixing a flaky test encounters database lock error LCK-402 in round 1; after another attempt, round 2 fails with the identical LCK-402 error with zero progress. (2) Another worker reports that integration tests require production API credentials and requests permission to escalate model to `gemini-3.8-pro`. Describe Pi's handling of stagnation and protected decisions.",
+      "expected_output": "Halts automatic retries after two consecutive rounds of identical blocker without progress, and halts immediately on protected decisions (credentials, model escalation), preserving all state and prompting the user.",
+      "files": [],
+      "expectations": [
+        "Allows remediation retries while measurable progress (fewer errors, new passing tests) is demonstrated.",
+        "Stops automatic remediation when the same blocker persists across two consecutive rounds without progress.",
+        "Halts immediately when an AGY worker requests credentials, deployment, permission bypass, or model escalation.",
+        "Does not auto-approve model escalation beyond gemini-3.8-flash-high.",
+        "Preserves all panes, worktrees, branches, partial edits, and logs when stopping, reporting exact blocker details to the user."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Verification for change `refactor-billing` passes. Pi initiates spec synchronization. The AGY lifecycle worker runs `openspec-sync-specs`. Pi evaluates the synchronization before authorizing archive. Explain the separate prompt gates, the `openspec validate --specs` validation check (carrying the store flag when applicable), what occurs if sync diverges, and the final archive audit.",
+      "expected_output": "Spec sync and archive are strictly separated prompts. Pi validates synchronized specs against deltas using `openspec validate --specs` with strict validation (including the store flag when applicable), withholds archive on divergence, and upon successful archive independently verifies that the change is archived and main specs remain valid.",
+      "files": [],
+      "expectations": [
+        "Maintains spec synchronization and archive as separate serial stages with independent prompt gates.",
+        "Never issues a combined sync-and-archive prompt to AGY.",
+        "Verifies synchronized main specs against delta specs and runs strict specs validation using openspec validate --specs (with the store flag when applicable) before authorizing archive.",
+        "Withholds archive authorization if sync diverges, fails, or produces validation errors, routing delta findings back to AGY.",
+        "Authorizes AGY archive only after all gates pass, and performs a final audit confirming the change is moved to archive and working tree is clean."
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Use the pi-openspec-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Compare resource management in two situations for change `add-export-csv`: (A) Delivery is interrupted by the user or an unrecoverable gate failure during Wave 2; (B) Delivery passes implementation, fresh verification, spec sync, archive, and final audit without errors. Detail which resources are preserved or cleaned in each case.",
+      "expected_output": "Complete preservation of all panes, worktrees, branches, and logs on interruption or failure; non-force cleanup of only workflow-created lane worktrees and branches on success, while preserving the integration branch.",
+      "files": [],
+      "expectations": [
+        "Preserves all Herdr panes, worker conversations, worktrees, branches, and partial edits upon failure or user interruption.",
+        "Never runs destructive or forced cleanup commands (such as git worktree remove --force or git branch -D).",
+        "Performs cleanup only after complete success: implementation, verification, spec sync, archive, and final audit all pass.",
+        "Cleans only workflow-created resources (removes clean lane worktrees and deletes integrated lane branches with non-force git branch -d).",
+        "Preserves the verified integration branch (e.g. delivery/add-export-csv) intact for user inspection.",
+        "Retains and reports any resource that cannot be removed safely with non-force operations."
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Use the pi-openspec-agy-delivery skill to evaluate a complete bounded fixture-repository delivery scenario for change `add-telemetry-pipeline`. The fixture contains: Task 1 (metrics collector in `telemetry/collector.ts`), Task 2 (event schema validator in `telemetry/validator.ts`), and Task 3 (telemetry pipeline coordinator in `telemetry/pipeline.ts` consuming collector and validator). Tasks 1 and 2 are independent; Task 3 depends on both. Trace the entire post-planning lifecycle with observable expected branches, worktrees, worker roles, gates, spec sync, archive, and cleanup. Include explicit safety constraints prohibiting credentials, remote push, deployment, permission bypass, and destructive cleanup.",
+      "expected_output": "A comprehensive bounded delivery execution tracing Wave 1 parallel lanes, Wave 2 dependent lane, integration commits, fresh read-only verification, spec sync, archive, and non-force cleanup, with strict negative assertions forbidding credentials, remote push, deployment, permission bypass, and destructive cleanup.",
+      "files": [],
+      "expectations": [
+        "Executes Wave 1 with independent Tasks 1 and 2 running concurrently in isolated worktrees and branches agy/add-telemetry-pipeline/lane-collector and agy/add-telemetry-pipeline/lane-validator.",
+        "Assigns one Herdr AGY worker per lane using gemini-3.8-flash-high --effort high with isolated implementation briefs.",
+        "Integrates accepted Wave 1 local commits into delivery/add-telemetry-pipeline after diff and test review, before scheduling dependent Task 3 in Wave 2.",
+        "Updates authoritative task markers on the integration branch via a single AGY integration worker only after integration and verification.",
+        "Conducts fresh verification using a dedicated read-only AGY verifier in --mode plan plus Pi's independent project gates.",
+        "Executes separately gated AGY spec sync and validates main specs with openspec validate before authorizing AGY archive.",
+        "Performs non-force cleanup of workflow-created lane worktrees and branches, preserving the final integration branch.",
+        "Contains no credentials, secret tokens, or requests for production secrets.",
+        "Contains no remote git push (git push), remote fetch, or remote PR creation.",
+        "Contains no deployment, staging upload, or package publishing steps.",
+        "Contains no permission bypass, sandbox escape, or automatic model escalation.",
+        "Contains no destructive cleanup operations such as git worktree remove --force, git branch -D, or git clean -fdx."
+      ]
+    }
+  ]
+}
