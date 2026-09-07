@@ -40,33 +40,10 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-plu
 npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery -a omp -y
 ```
 
-Install this orchestration skill for OMP only. Do not install or invoke it as an AGY implementation skill.
-
-Use OpenSpec planning first, then send a separate delivery request after reviewing the artifacts:
-
-```text
-/opsx-explore
-/opsx-propose <change>
-
-Deliver <change> through openspec-agy-delivery.
-```
-
 - OMP (plan-mode delivery)
 
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill omp-plan-agy-delivery -a omp -y
-```
-
-Install this orchestration skill for OMP only. Do not install or invoke it as an AGY implementation skill. It is independent of OpenSpec and executes an approved OMP plan file only.
-
-Use OMP plan mode first, then send a separate execution request from a new OMP session inside Herdr at the target repository:
-
-```text
-/plan
-# author the decision-complete plan, then choose Save and quit
-# save the plan to plans/<slug>-plan.md in the target repository
-
-Execute the approved plan at plans/<slug>-plan.md through omp-plan-agy-delivery.
 ```
 
 - Pi
@@ -74,37 +51,6 @@ Execute the approved plan at plans/<slug>-plan.md through omp-plan-agy-delivery.
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill pi-openspec-agy-delivery -a pi -y
 ```
-
-Install this orchestration skill for Pi only (target `.pi/skills/`). Do not install or invoke it as an AGY implementation skill, and do not install it into `.agents/skills/`.
-
-Use OpenSpec planning first, review the generated artifacts, and stop. Planning never automatically triggers implementation. Send a separate delivery request naming the approved change:
-
-```text
-/opsx-explore
-/opsx-propose <change>
-
-Deliver <change> through pi-openspec-agy-delivery.
-```
-
-#### Concurrency override
-
-Pi dynamically schedules independent tasks into parallel waves with a default maximum concurrency of three workers (`min(3, ready lanes)`). To override the concurrency limit as an upper bound:
-
-```text
-Deliver <change> through pi-openspec-agy-delivery with max 2 workers.
-```
-
-or for strict serialization:
-
-```text
-Deliver <change> through pi-openspec-agy-delivery with concurrency 1.
-```
-
-#### Delivery branch behavior and no-push boundary
-
-- **Branch creation**: If delivery starts on the default branch (e.g., `main`), Pi automatically creates and integrates into a dedicated local `delivery/<change>` integration branch before committing the planning checkpoint. If delivery starts on an existing feature branch, that branch is used as the integration branch.
-- **Local-only integration**: Pi integrates accepted lane commits into the integration branch locally. Authoritative task markers are updated on the integration branch only after accepted code is integrated and verified.
-- **No-push boundary**: The workflow operates strictly on local git branches and worktrees. It will never push to remotes, force-push, rebase, open a pull request, or merge into the default branch. The user retains sole authority over publishing and landing changes.
 
 ---
 
