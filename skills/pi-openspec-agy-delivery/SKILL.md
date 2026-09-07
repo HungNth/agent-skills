@@ -1,6 +1,6 @@
 ---
 name: pi-openspec-agy-delivery
-description: Deliver an explicitly approved OpenSpec change by having Pi coordinate dependency-aware parallel Antigravity CLI (AGY) workers through Herdr in isolated worktrees, then supervise fresh read-only verification, spec synchronization, and archive. Use only when the current agent is Pi and the user explicitly requests post-planning delivery of a named approved OpenSpec change. Never use inside an AGY worker, under OMP, during explore or proposal planning workflows (/opsx-explore, /opsx-propose), before separate post-planning approval, or for ad-hoc coding tasks.
+description: Deliver an explicitly approved OpenSpec change by having Pi coordinate dependency-aware parallel Antigravity CLI (AGY) workers through Herdr in isolated worktrees, then supervise fresh read-only verification, spec synchronization, and archive. Use only when the current agent is Pi and the user explicitly requests post-planning delivery of a named approved OpenSpec change. Never use inside an AGY worker, under OMP, during initial exploration or proposal planning workflows, before separate post-planning approval, or for ad-hoc coding tasks.
 compatibility: Requires Pi running inside Herdr (HERDR_ENV=1) with herdr, agy, openspec, and git CLIs installed; AGY authenticated with gemini-3.8-flash-high available. Supports native Windows, macOS, and Linux hosts.
 ---
 
@@ -64,19 +64,23 @@ If the user specifies a standalone store or the work resides in one:
 
 Resolve exactly one change in the selected planning root. If ambiguous, run `openspec list --json [--store <id>]` and prompt the user to choose. Announce the selected change and store.
 
-Run authoritative OpenSpec commands:
+Run authoritative OpenSpec commands and parse their separate payloads:
 ```text
 openspec status --change <change> --json [--store <id>]
 openspec instructions apply --change <change> --json [--store <id>]
 openspec validate <change> --type change --strict --no-interactive [--store <id>]
 ```
 
-Extract `schemaName`, `planningHome`, `changeRoot`, `actionContext`, `artifactPaths`, apply `state`, `contextFiles`, task list, and dynamic instruction from the returned JSON.
+Separate field ownership across returned JSON outputs (do not treat as a single merged payload):
+- **From `openspec status` JSON**: Extract `schemaName`, `planningHome`, `changeRoot`, `artifactPaths`, and `actionContext` to establish workflow schema, repository/store roots, and allowed edit paths.
+- **From `openspec instructions apply` JSON**: Extract apply `state`, `contextFiles` (artifact ID to concrete file paths), `progress`, `tasks` checklist, dynamic `instruction`, required project `context`, and advisory `operationGuidance`.
+
+Route on apply `state`:
 - `blocked`: Stop before creating workers and report the missing planning prerequisites.
 - `all_done`: Skip implementation and proceed directly to independent verification.
 - `ready`: Read every file path listed in `contextFiles`.
 
-Apply runtime `context` and compatible `operationGuidance`. They do not override user decisions, CLI state, or workflow contracts.
+Apply runtime `context` as required project input, and consider compatible `operationGuidance`. Neither overrides user decisions, CLI state, or workflow contracts.
 
 ## 2. Prerequisites, Continuation & Dirty-Tree Preflight
 
@@ -139,15 +143,19 @@ For each ready lane in the wave:
    git branch agy/<change>/<lane> HEAD
    ```
 5. Allocate dedicated git worktree rooted at the lane branch:
-   ```text
-   git worktree add <worktree-path> agy/<change>/<lane>
-   ```
-   No two active writers ever share a worktree or directory.
+   - Worktree path definition: Define the worktree path strictly outside the repository working directory, using a resolved sibling worktree root (e.g. `<repo-parent>/<repo-name>-worktrees/agy-<change>-<lane>`) or another user-approved external path. Never create lane worktrees inside the parent repository checkout.
+   - Collision-check the resolved absolute filesystem path against existing disk directories and `git worktree list` before creation.
+   - Create worktree:
+     ```text
+     git worktree add <worktree-path> agy/<change>/<lane>
+     ```
+   - No two active writers ever share a worktree or working directory.
 6. Allocate a dedicated background Herdr pane rooted at `<worktree-path>`:
    ```text
    herdr pane split --current --direction <right|down> --cwd <worktree-path> --no-focus
    ```
-7. Launch AGY implementation worker in the pane with explicit model and reasoning effort:
+   Parse `.result.pane.pane_id` directly from the split response JSON to obtain `<pane-id>`.
+7. Launch AGY implementation worker in the pane using the extracted `<pane-id>` with explicit model and reasoning effort:
    ```text
    herdr agent start <worker-name> --kind agy --pane <pane-id> -- --model gemini-3.8-flash-high --effort high
    ```
@@ -228,8 +236,12 @@ For each completed lane:
 After all implementation waves are integrated on the integration branch:
 1. **Independent project gates**: Pi runs repository-wide gates on the integrated branch: lint, typecheck, test suite, build, and behavioral smoke check. These run once on the integrated tree.
 2. **Fresh read-only AGY verifier**:
-   - Allocate a fresh background Herdr pane rooted at the repository root.
-   - Launch a brand-new AGY verifier in read-only mode:
+   - Allocate a fresh background Herdr pane rooted at the repository root:
+     ```text
+     herdr pane split --current --direction <right|down> --cwd <repository-root> --no-focus
+     ```
+     Parse `.result.pane.pane_id` from the split response JSON to obtain `<pane-id>`.
+   - Launch a brand-new AGY verifier in read-only mode using the extracted `<pane-id>`:
      ```text
      herdr agent start <verifier-name> --kind agy --pane <pane-id> -- --mode plan --model gemini-3.8-flash-high --effort high
      ```
@@ -256,7 +268,7 @@ Spec synchronization and archive are strictly separate serial stages with indepe
 
 ### Stage 1: Spec Synchronization
 - Authorized only after implementation verification and Pi project gates pass.
-- Start or prompt a write-capable AGY lifecycle worker in a dedicated pane to invoke the exact skill `openspec-sync-specs` (passing the change name and sticky `--store <id>` when applicable). The worker obtains context using `openspec status --change <change> --json` and `openspec instructions specs --change <change> --json`, performs an agent-driven intelligent merge of delta specs into main specs, and preserves unaffected requirements.
+- Allocate a dedicated background Herdr pane rooted at the repository root, parse `.result.pane.pane_id` from the split response JSON to obtain `<pane-id>`, and start or prompt a write-capable AGY lifecycle worker in `<pane-id>` to invoke the exact skill `openspec-sync-specs` (passing the change name and sticky `--store <id>` when applicable). The worker obtains context using `openspec status --change <change> --json` and `openspec instructions specs --change <change> --json`, performs an agent-driven intelligent merge of delta specs into main specs, and preserves unaffected requirements.
 - Pi validates the result:
   - Compare updated main specs against change delta specs.
   - Run strict specs validation:
