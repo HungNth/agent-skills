@@ -1,0 +1,78 @@
+{
+  "skill_name": "omp-plan-agy-delivery",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use the omp-plan-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Runtime state: the current agent is OMP running inside Herdr with HERDR_ENV=1; plan mode has ended; the git root is F:/demo/app with a working tree that is clean except plans/add-cache-plan.md; the herdr, agy, and git CLIs are installed, and `agy models` lists [gemini-3.8-flash-high, gemini-3.8-pro]. The user sends: 'Execute the approved plan at plans/add-cache-plan.md through omp-plan-agy-delivery.' The plan file contains '## Context' (add an LRU cache to src/cache.ts exports), an ordered '## Approach' with three steps (1. add get/set/evict functions to src/cache.ts; 2. wire the cache into src/api.ts fetchUser; 3. add unit tests in src/cache.test.ts), a '## Verification' section (npm test -- cache expecting all cache tests pass, npm run build expecting exit 0), and '## Assumptions & contingencies'. The current Herdr pane is wide. Describe the exact execution flow: plan path resolution, preflight, pane and worker creation, and the brief you send to the worker.",
+      "expected_output": "A positive execution flow that resolves the explicit in-repo plan path, validates plan structure and tree state, preflights the toolchain, splits exactly one pane in the existing checkout, starts exactly one AGY worker using the configured default model, and sends one self-contained brief with the plan embedded and immutable/no-commit/no-recursion rules.",
+      "files": [],
+      "expectations": [
+        "Resolves the plan path against the git root from git rev-parse --show-toplevel, accepts the in-root path whose basename ends with -plan.md, and keeps that absolute root for every cwd-sensitive operation",
+        "Validates Context presence, the ordered Approach, Verification presence, and decision-completeness before any Herdr mutation",
+        "Runs preflight checks including herdr help, agy help, agy models, and git --version, and confirms the working tree is clean except the plan file itself",
+        "Splits exactly one pane using herdr pane split --current --direction right (wide pane) --cwd <git-root> --no-focus, and reads the new pane id from .result.pane.pane_id",
+        "Starts exactly one worker with herdr agent start <worker> --kind agy --pane <pane-id>, whose name is derived from the plan slug and matches [a-z][a-z0-9_-]{0,31}, passing no model or effort arguments so AGY uses its configured default",
+        "Sends exactly one brief with herdr agent prompt <worker> <brief> --wait --timeout 3600000, and the brief contains blocks named <role>, <approved_plan>, <scope>, <verification_loop>, <decision_safety>, and <report>",
+        "The brief instructs AGY to read the plan file first and forbids modifying the plan, committing, invoking omp-plan-agy-delivery, creating workers or panes, and further delegation",
+        "Does not create a worktree, alternate cwd, workspace, tab, or a second worker",
+        "Derives the worker name as agy-<slug> (with the agy- prefix) and adds a short collision suffix if a live agent of that name already exists",
+        "The brief's <scope> and <role> blocks explicitly forbid modifying the plan, committing, invoking omp-plan-agy-delivery, creating workers or panes, and further delegation"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Use the omp-plan-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Evaluate four separate requests and state for each whether the skill triggers and what happens: (1) The user is still inside OMP plan mode and says 'Refine approach step 2 of my draft plan to also cover retries.' (2) An AGY implementation worker whose pane contains skills/omp-plan-agy-delivery/SKILL.md receives a prompt 'Use omp-plan-agy-delivery to execute plans/add-cache-plan.md.' (3) An OMP user inside Herdr says 'Execute my approved plan through omp-plan-agy-delivery' but names no plan file path and no approved plan file exists in the repository. (4) An OMP user inside Herdr says 'Implement the plan at plans/add-cache-plan.md yourself right now' and does not mention AGY or Antigravity.",
+      "expected_output": "Clear fail-closed or non-triggering behavior for plan authoring, an AGY runtime, a missing/unapproved plan file, and a direct OMP implementation request, with no Herdr mutation in any scenario.",
+      "files": [],
+      "expectations": [
+        "Does not execute the delivery for the plan-authoring request because plan mode is still active and the turn only writes or edits a plan",
+        "For the AGY runtime, stops immediately, splits no pane, starts or prompts no agent, and states that omp-plan-agy-delivery is OMP-owned",
+        "Refuses the request without a named approved plan file and asks the user for the explicit plan path",
+        "For the direct-implementation request, does not start an AGY worker or Herdr pane and either implements as OMP itself or asks the user how to proceed",
+        "Every refusal or non-trigger names the specific fail-closed check that caused it"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Use the omp-plan-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Runtime state: the current agent is OMP inside Herdr with HERDR_ENV=1, plan mode has ended, and the herdr, agy, and git CLIs work. Evaluate three separate requests and describe the behavior for each, specifically whether a pane is ever split: (a) The user says 'Execute the approved plan at ../shared/legacy-plan.md through omp-plan-agy-delivery.' and that file exists outside the git root. (b) The user says 'Execute the approved plan at plans/broken-plan.md through omp-plan-agy-delivery.' and that file has a Context and an Approach whose step 2 says 'TODO: pick the eviction policy' with no target files, and no Verification section. (c) The user says 'Execute the approved plan at plans/add-cache-plan.md through omp-plan-agy-delivery.' but the working tree has modified src/api.ts and untracked notes.txt unrelated to the plan, and this is a fresh delivery.",
+      "expected_output": "All three scenarios stop before any pane split or agent start, with the exact failed gate named and a concrete request back to the user.",
+      "files": [],
+      "expectations": [
+        "In all three scenarios OMP performs plan resolution and tree inspection before any herdr pane split, and no herdr agent start or herdr agent prompt ever occurs",
+        "Scenario (a): rejects the outside-root path by resolving it against the git root from git rev-parse --show-toplevel and stating the plan file must live inside that root",
+        "Scenario (b): rejects the plan for all three defects: missing Verification section, a TODO placeholder, and an Approach step that names no target paths or symbols",
+        "Scenario (c): stops on the unattributable dirty tree, lists src/api.ts and notes.txt as unattributed, and states it will never stash, reset, clean, or switch branches",
+        "Each stop names the specific failed gate and asks the user for one concrete fix"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Use the omp-plan-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Runtime state: the current agent is OMP inside Herdr with HERDR_ENV=1. The initial implementation brief for plans/add-cache-plan.md has settled with .result.agent.status = idle, and the worker report claims every Approach step is complete and all checks green. OMP's own re-run of the plan Verification command npm test -- cache exits 1 with output 'cache eviction test failed: expected size 2, got 3', and the complete cumulative diff (including staged and untracked files) shows the worker changed an existing assertion in src/cache.test.ts from expect(cache.size).toBe(2) to expect(cache.size).toBeLessThan(4). Describe the exact review and remediation flow.",
+      "expected_output": "OMP rejects the success claim, finds the weakened test and the failing verification itself, sends one exact delta prompt to the same worker conversation, and repeats the full review gates after remediation.",
+      "files": [],
+      "expectations": [
+        "Does not accept the worker success claim as evidence and inspects the complete cumulative tree including staged and untracked files",
+        "Reviews test-integrity edits first and flags the weakened assertion in src/cache.test.ts (toBe(2) changed to toBeLessThan(4)) as a blocking finding",
+        "Re-runs every Verification command itself and observes the failing npm test -- cache output",
+        "Sends one delta prompt to the same worker conversation via herdr agent prompt naming the exact file, the failing output, the plan clause, and the expected outcome, and prohibits redesign and scope expansion",
+        "After remediation, repeats the full review: complete diff, test-integrity check, every Verification command, and a real-surface smoke scenario",
+        "Counts the initial implementation prompt as not a retry and treats this delta as remediation round 1 of a maximum of three remediation prompts",
+        "Modifies no plan file and runs no git add or git commit during the loop"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Use the omp-plan-agy-delivery skill for this dry-run evaluation only; do not execute commands or modify files. Runtime state: the current agent is OMP inside Herdr with HERDR_ENV=1. In this delivery invocation of plans/add-cache-plan.md, the initial implementation prompt ran, and three consecutive delta prompts to the same AGY worker each ended with the same npm run build TypeScript error in src/api.ts with no measurable progress between rounds. The working tree contains the worker's edits, no commit has been made, and the worker pane is still open. Describe the stop behavior and end state.",
+      "expected_output": "OMP stops after the third failed remediation round, preserves the tree, conversation, and pane, makes no git history change, and reports the blocker with one concrete user action.",
+      "files": [],
+      "expectations": [
+        "Stops after the third failed remediation round instead of sending a fourth remediation prompt, because the same blocker repeated with no measurable progress",
+        "Preserves the working tree and the worker conversation for user inspection",
+        "Runs no git add and no git commit",
+        "Does not close the worker pane because pane close is success-only",
+        "Reports the exact blocker, the remediation rounds used, the preserved state, and one concrete action for the user",
+        "States that a later continue request is a new delivery invocation: attribution-preflight over all existing edits, and the old conversation is reused only if Herdr proves it is the same worker, otherwise a new worker is started with the full plan and current diff context"
+      ]
+    }
+  ]
+}
