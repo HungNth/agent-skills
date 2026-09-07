@@ -13,6 +13,7 @@ Custom skills currently available in this repo:
 skills/
 ├─ flow-launcher-csharp-plugin/
 ├─ flow-launcher-nodejs-plugin/
+├─ omp-plan-agy-delivery/
 ├─ openspec-agy-delivery/
 ├─ photoshop-uxp-scripting/
 └─ pi-openspec-agy-delivery/
@@ -48,6 +49,24 @@ Use OpenSpec planning first, then send a separate delivery request after reviewi
 /opsx-propose <change>
 
 Deliver <change> through openspec-agy-delivery.
+```
+
+- OMP (plan-mode delivery)
+
+```bash
+npx skills add https://github.com/HungNth/agent-skills --skill omp-plan-agy-delivery -a omp -y
+```
+
+Install this orchestration skill for OMP only. Do not install or invoke it as an AGY implementation skill. It is independent of OpenSpec and executes an approved OMP plan file only.
+
+Use OMP plan mode first, then send a separate execution request from a new OMP session inside Herdr at the target repository:
+
+```text
+/plan
+# author the decision-complete plan, then choose Save and quit
+# save the plan to plans/<slug>-plan.md in the target repository
+
+Execute the approved plan at plans/<slug>-plan.md through omp-plan-agy-delivery.
 ```
 
 - Pi
