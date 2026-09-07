@@ -1,6 +1,6 @@
 # OMP + OpenSpec Development Workflow
 
-Sections prefixed `OMP-only` apply only to the OMP orchestrator. AGY implementation workers must not invoke OMP worker kinds or delegation rules; they follow the shared `OpenSpec AGY delivery` section and their approved OpenSpec apply context.
+Sections prefixed `OMP-only` apply only to the OMP orchestrator. AGY implementation workers must not invoke OMP worker kinds or delegation rules; they follow the applicable delivery policy (`OpenSpec AGY delivery` for OMP or `Pi + OpenSpec AGY delivery: pi-openspec-agy-delivery` for Pi) and their approved OpenSpec apply context.
 
 ## Responsibility split
 
@@ -84,3 +84,35 @@ or delegating fixes.
 Prefer specialized workers for high-volume implementation and exploration.
 Reserve the main reasoning model for architecture, integration, ambiguous
 decisions, and final correctness judgments.
+
+## Pi + OpenSpec AGY delivery: pi-openspec-agy-delivery
+
+`pi-openspec-agy-delivery` is a Pi-owned orchestration workflow. An AGY implementation worker must use its assigned atomic OpenSpec workflow (`openspec-apply-change`, `openspec-verify-change`, `openspec-sync-specs`, or `openspec-archive-change`) and must never invoke `pi-openspec-agy-delivery` or `openspec-agy-delivery`, create another worker, or orchestrate deliveries.
+
+### Hard post-planning approval
+Planning workflows (`/opsx-explore`, `/opsx-propose`) authorize planning only. Pi must stop after planning artifacts are complete without starting AGY workers or modifying implementation files. Implementation begins only when the user explicitly requests delivery of a named, approved OpenSpec change through `pi-openspec-agy-delivery`.
+
+### One writer per branch/worktree/pane
+Every concurrently active AGY implementation writer must be isolated in its own dedicated git branch (`agy/<change>/<lane>`), clean git worktree, and Herdr pane. No two active writers ever share a working tree or pane.
+
+### Dependency-aware parallel waves with default maximum three
+Pi builds a conservative task dependency graph from approved artifacts, interfaces, modules, and repository evidence. Execution runs in topological waves branching from the latest accepted integration commit. Uncertain dependencies are serialized rather than guessed as parallel. Concurrency is capped at a default maximum of three workers (`min(3, ready lanes)`); an explicit user concurrency limit acts as an upper bound.
+
+### Pi acceptance and local-only integration commits
+Pi owns diff inspection, test-integrity review, rerunning targeted and full project gates, and acceptance. Pi integrates accepted lanes in dependency order using local commits on the integration branch. Pi never modifies implementation code itself. Mechanical integration conflicts are delegated to a single AGY integration worker; contract-changing conflicts halt for user planning clarification.
+Authoritative task completion markers on the integration branch are owned by Pi and updated by an AGY integration worker only after accepted code is integrated and verified; parallel implementation lanes report candidate completion but do not modify authoritative task markers.
+
+### AGY ownership of atomic OpenSpec workflows
+AGY performs all post-planning OpenSpec operations under Pi's gated supervision: implementation via `openspec-apply-change`, verification via `openspec-verify-change`, synchronization via `openspec-sync-specs`, and archive via `openspec-archive-change`. Each stage is prompted separately after preceding gates pass.
+
+### Fresh read-only verification
+Every verification cycle must run in a fresh AGY conversation started with `--mode plan`, `gemini-3.8-flash-high`, and `--effort high`. The verifier has no write authority, cannot modify files, and cannot transition into a writer role. The verifier evaluates completeness, correctness, coherence, task state, and test integrity. The verifier's report is advisory evidence and never replaces Pi's independent project gates. Any remediation modifying implementation triggers a new fresh read-only verification cycle.
+
+### Safe local integration branch and no-push boundary
+Delivery creates local orchestration checkpoints and accepted lane commits only. If delivery starts on the default branch, Pi creates a local `delivery/<change>` integration branch before committing the planning checkpoint. Delivery results remain on the local integration branch without pushing to remotes, force-pushing, rebasing, opening pull requests, or merging into the default branch.
+
+### Progress-aware remediation
+Pi automatically retries actionable AGY failures without an arbitrary fixed round cap as long as measurable progress occurs (reducing failing tests, clearing blocking issues, or completing behavior). If the same blocker persists across two consecutive rounds without progress, Pi halts and reports the blocker for user action. Pi immediately stops for user guidance on protected decisions (credentials, destructive actions, permission escalation, deployment, publishing, requirement/design decisions, scope changes, model escalation). In case of worker crashes or timeouts, partial work is inspected and preserved before resuming or replacing workers.
+
+### Failure preservation and success-only cleanup
+On failure, user interruption, or unresolved blockers, Pi preserves all worker conversations, Herdr panes, branches, worktrees, local commits, partial changes, and diagnostic evidence for inspection and resumption. Only after complete success across all stages (implementation, verification, synchronization, archive, and final audit pass), Pi cleans workflow-created idle panes, clean lane worktrees, and fully integrated lane branches using non-force operations. The integration branch is always retained. Any resource refusing non-force removal is reported and preserved intact.
