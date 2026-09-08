@@ -65,12 +65,23 @@ The delivery workflow SHALL run inside a Herdr-managed OMP pane and SHALL launch
 - **WHEN** a worker name already belongs to another repository, workspace, or active delivery
 - **THEN** the workflow does not reuse that worker
 
+### Requirement: OMP evaluates task dependencies and schedules delivery
+OMP SHALL evaluate task dependencies in `tasks.md` before dispatching tasks to AGY workers, scheduling independent tasks concurrently and dependent tasks sequentially.
+
+#### Scenario: Tasks have dependencies
+- **WHEN** tasks in `tasks.md` depend on artifacts or code from prior tasks
+- **THEN** OMP dispatches them sequentially, evaluating each task's diff and completion status before dispatching the next
+
+#### Scenario: Tasks are independent
+- **WHEN** tasks in `tasks.md` modify disjoint components or files without sequential dependencies
+- **THEN** OMP may spawn concurrent AGY workers in separate Herdr panes using isolated git worktrees to execute them in parallel
+
 ### Requirement: AGY follows the approved OpenSpec apply contract
-The AGY worker SHALL implement the remaining tasks described by the selected change and SHALL treat the reported OpenSpec apply context as authoritative.
+The AGY worker SHALL implement assigned tasks dispatched by OMP, update required task completion markers, run implementation-time checks, and return structured reports for OMP evaluation.
 
 #### Scenario: Apply state is ready
-- **WHEN** OpenSpec reports remaining implementation tasks
-- **THEN** AGY reads every reported context file, implements the remaining tasks, updates required completion markers, runs implementation-time checks, and returns a structured report
+- **WHEN** OpenSpec reports remaining implementation tasks and OMP dispatches a task batch or individual task
+- **THEN** AGY reads reported context files, implements assigned tasks, updates required completion markers, runs implementation-time checks, and reports progress to OMP
 
 #### Scenario: Apply state is blocked
 - **WHEN** OpenSpec reports that required planning artifacts are missing or the apply workflow is blocked
@@ -81,19 +92,19 @@ The AGY worker SHALL implement the remaining tasks described by the selected cha
 - **THEN** AGY stops and OMP presents the blocker to the user instead of guessing or auto-approving it
 
 ### Requirement: OMP independently verifies implementation
-OMP SHALL treat AGY output as a claim and SHALL independently verify artifact conformance and project behavior before archive.
+OMP SHALL treat AGY output as a claim, evaluate task-level diffs, and instruct AGY to execute `openspec-verify-change` and project verification suites while OMP independently evaluates the outcomes.
 
 #### Scenario: AGY reports success
-- **WHEN** AGY settles in an idle or done state after implementation
-- **THEN** OMP inspects the complete working-tree change, runs `openspec-verify-change`, and runs fresh project-specific verification and behavioral checks
+- **WHEN** AGY settles in an idle or done state after implementation or verification execution
+- **THEN** OMP inspects the complete working-tree change, evaluates `openspec-verify-change` results, and verifies that project checks pass before authorizing archive
 
 #### Scenario: OpenSpec verification finds a critical issue
 - **WHEN** `openspec-verify-change` reports one or more CRITICAL findings
-- **THEN** the workflow treats delivery as failed and does not archive
+- **THEN** OMP treats delivery as failed or directs bounded remediation, and does not authorize archive
 
 #### Scenario: Fresh project verification fails
 - **WHEN** any required lint, typecheck, test, build, or behavioral check fails
-- **THEN** the workflow treats delivery as failed regardless of AGY's reported results
+- **THEN** OMP treats verification as failed and requires remediation regardless of AGY claims
 
 ### Requirement: Verification failures use bounded remediation
 The delivery workflow SHALL send concrete verification findings back to the same AGY conversation and SHALL re-run all blocking gates after each remediation attempt.
@@ -107,15 +118,15 @@ The delivery workflow SHALL send concrete verification findings back to the same
 - **THEN** the workflow stops, preserves the working tree, and reports the remaining findings without archiving
 
 ### Requirement: Archive is owned and gated by OMP
-OMP SHALL own spec synchronization and archive, and AGY SHALL NOT perform either operation.
+OMP SHALL gate and authorize spec synchronization and archive, and AGY SHALL execute `openspec-archive-change` only upon explicit OMP authorization.
 
 #### Scenario: Every blocking gate passes
 - **WHEN** implementation is complete, OpenSpec verification has no CRITICAL findings, fresh project verification passes, and no protected decision remains
-- **THEN** OMP follows `openspec-archive-change`, applies the approved recommended spec synchronization when required, and archives the change
+- **THEN** OMP instructs AGY to execute `openspec-archive-change` (with recommended spec synchronization), and OMP confirms that the change is archived
 
 #### Scenario: A blocking gate remains
 - **WHEN** any required gate or decision remains unresolved
-- **THEN** the change remains active and the workflow reports why archive was skipped
+- **THEN** OMP does not authorize archive, the change remains active, and the workflow reports why archive was blocked
 
 ### Requirement: Delivery reports verifiable outcomes
 The workflow SHALL finish with a concise report that identifies the selected change, worker state, affected areas, independently executed verification, remediation outcome, and archive result.

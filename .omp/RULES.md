@@ -1,3 +1,5 @@
+Follow AGENTS.md as the authoritative source for workflow roles and orchestration rules.
+
 OpenSpec artifacts are the source of truth for an active OpenSpec change.
 
 Do not implement project code during OpenSpec explore or proposal-generation workflows.

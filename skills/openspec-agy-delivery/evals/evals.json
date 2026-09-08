@@ -1,0 +1,181 @@
+{
+  "skill_name": "openspec-agy-delivery",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Deliver the approved change `refactor-openspec-agy-delivery` via `openspec-agy-delivery`. The schema reports the task artifact path under `contextFiles` (for the spec-driven schema it resolves to `tasks.md`). OMP dispatches one assigned task at a time. Worker must follow the schema-reported task source.",
+      "expected_output": "OMP resolves the change and store (no store here), reads `openspec instructions apply --json`, identifies the schema-reported task artifact path, and dispatches one assigned task per worker prompt.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "The worker references `openspec instructions apply --json` (not a literal `tasks.md` lookup) when reading tasks.",
+        "OMP assigns one task ID per prompt and waits for `idle`/`done` before advancing.",
+        "OMP does not hardcode, alias, or substitute a literal `tasks.md` when the schema reports a different path.",
+        "Worker prompts include the change name and (when present) the store id."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Deliver the approved change `refactor-openspec-agy-delivery` using a custom schema that reports a non-`tasks.md` task artifact (for example `implementation.md`). OMP dispatches only the assigned task IDs.",
+      "expected_output": "OMP and AGY follow the schema-reported path and OMP supplies an assigned-task subset to the worker; the worker implements only that subset and reports remaining progress.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md",
+        ".gemini/skills/openspec-apply-change/SKILL.md"
+      ],
+      "expectations": [
+        "OMP reads `contextFiles` from the apply JSON and uses the path the schema reports.",
+        "OMP does not alias or hardcode `tasks.md`.",
+        "The apply contract cross-checks assigned IDs against the schema-reported task list and rejects missing or already-complete IDs as blockers.",
+        "The apply contract reports overall remaining progress even when OpenSpec still reports `state: ready`."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Deliver two dependent tasks in `refactor-openspec-agy-delivery` (task `2.1` depends on `2.2`). The DAG forces sequential dispatch.",
+      "expected_output": "OMP dispatches both tasks sequentially on the single primary worker; no detached worktree is created.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "OMP uses the single-worker (sequential) topology because the tasks are dependent.",
+        "OMP does not call `git worktree add` for the dependent stage.",
+        "OMP reviews the diff and task marker between tasks before dispatching the next."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Deliver two independent root tasks in `refactor-openspec-agy-delivery` on a clean primary tree with the changeRoot committed at HEAD. Concurrent topology is allowed.",
+      "expected_output": "OMP creates detached worktrees per task, the workers settle, OMP exports binary patches from each worktree, `git apply --check` then `git apply` in the primary tree, updates the task marker, removes the worktree, and never calls `git merge`.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "OMP uses `git worktree add --detach <absolute-worktree-path> <base-commit>` (detached, no branch).",
+        "OMP exports `git diff HEAD --binary --output=<absolute-patch-path> -- <approved-implementation-paths>` from the worktree.",
+        "OMP runs `git apply --check <patch>` then `git apply <patch>` in the primary tree before any further work.",
+        "OMP runs `git worktree remove --force <path>` and deletes the patch file.",
+        "No `git merge`, no branch creation, no commit from AGY.",
+        "After the first accepted patch, OMP does not create new worktrees for the remaining tasks."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Deliver two independent root tasks in `refactor-openspec-agy-delivery` but the changeRoot has uncommitted artifacts (or the worker-side probe inside the worktree does not return the same change/store with `state: ready`).",
+      "expected_output": "OMP does not copy or guess artifact paths. OMP removes the worktree (if created) and falls the whole stage back to sequential before starting any concurrent worker.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "OMP detects the missing/uncommitted repo-local artifact and chooses sequential.",
+        "OMP removes the worktree on probe failure and does not retry.",
+        "OMP does not copy `openspec/changes/<change>/...` content into a worktree."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Deliver the change where the first concurrent patch has already been integrated; remaining tasks are independent but a new worktree would not see the accepted baseline.",
+      "expected_output": "OMP does not create additional worktrees; remaining tasks run on the single primary worker.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "OMP continues with the single primary worker for remaining tasks after the first accepted patch.",
+        "OMP does not invoke `git worktree add` for subsequent stages."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Deliver the approved change `refactor-openspec-agy-delivery` whose apply state is `all_done` (every task already implemented before the worker starts).",
+      "expected_output": "OMP does not implement; OMP starts (or reuses) a lifecycle AGY worker that executes `openspec-verify-change` and the canonical commands OMP discovered; OMP independently runs a targeted smoke on the primary tree; archive is gated.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "OMP skips implementation prompts when `state: all_done`.",
+        "OMP creates or reuses a lifecycle worker for verification (no detached worktrees).",
+        "OMP independently runs a targeted smoke check before authorizing archive.",
+        "OMP refuses archive when any gate remains unresolved."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Deliver `refactor-openspec-agy-delivery`; implementation completes, then verification reports blocking findings (e.g., a CRITICAL from `openspec-verify-change` or a failed canonical check).",
+      "expected_output": "OMP sends a bounded remediation prompt; AGY runs every blocking command again; OMP re-reviews the diff and re-runs targeted smoke. Three rounds or repeated blockers halt without archive.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "OMP rejects weakened, skipped, or disabled tests.",
+        "OMP allows up to three remediation rounds.",
+        "Three failing rounds or the same blocker repeating halts the workflow and forbids archive."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Deliver `refactor-openspec-agy-delivery`; all gates pass. OMP authorizes archive.",
+      "expected_output": "OMP prompts AGY with the pinned `Sync now (recommended)` archive prompt. After AGY archives, OMP confirms the original changeRoot is gone, the archive path exists, main specs reflect the delta, and both `openspec validate --specs` and `openspec validate --archived` pass.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "Archive prompt pins `Sync now (recommended)` and forbids AGY from choosing another option.",
+        "OMP verifies the original changeRoot no longer exists and the archive path is present.",
+        "OMP runs both `openspec validate --specs --strict --no-interactive` and `openspec validate --archived --strict --no-interactive`."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "AGY implementation worker (not OMP) receives the implementation brief for the approved change `refactor-openspec-agy-delivery`.",
+      "expected_output": "AGY replies with the exact literal skill name `openspec-apply-change`, invokes that workflow for the assigned task IDs, and never invokes `openspec-agy-delivery` or starts another AGY worker.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md",
+        ".gemini/skills/openspec-apply-change/SKILL.md"
+      ],
+      "expectations": [
+        "AGY does not invoke `openspec-agy-delivery`.",
+        "AGY does not start or recursively delegate another AGY worker.",
+        "AGY uses the assigned-task subset and reports overall remaining progress."
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Start the lifecycle AGY worker for `refactor-openspec-agy-delivery` from a Herdr pane.",
+      "expected_output": "OMP launches the worker with the default model `gemini-3.8-flash-high` and `--effort high`; the model must appear in `agy models`.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "OMP launches the worker with `--model gemini-3.8-flash-high --effort high`.",
+        "OMP substitutes another model only when the user names one and `agy models` lists it.",
+        "If the default model is missing from `agy models`, OMP stops and reports the missing prerequisite."
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Deliver the approved change on a native Windows host with no POSIX-only helper available.",
+      "expected_output": "The workflow runs without Bash, `jq`, or another POSIX-only wrapper and uses host-native quoting for every CLI invocation.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "The skill does not require Bash, `jq`, or POSIX shell features.",
+        "Each CLI invocation is described as an argument sequence with host-native quoting.",
+        "The skill works on macOS, Linux, and native Windows hosts supported by the listed CLIs."
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "Deliver a change that lives in a standalone OpenSpec store registered on this machine.",
+      "expected_output": "OMP resolves `--store <id>` from `openspec store list --json` and propagates it to every applicable OpenSpec command through verification and archive.",
+      "files": [
+        "skills/openspec-agy-delivery/SKILL.md"
+      ],
+      "expectations": [
+        "OMP runs `openspec store list --json` and resolves a registered id before listing changes.",
+        "OMP appends `--store <id>` to every applicable OpenSpec command.",
+        "OMP includes the store id in every AGY brief, verification, remediation, and archive handoff."
+      ]
+    }
+  ]
+}
