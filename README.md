@@ -37,13 +37,19 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-plu
 - OMP
 
 ```bash
-npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery -a omp -y
+npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery -y
 ```
 
 - OMP (plan-mode delivery)
 
 ```bash
-npx skills add https://github.com/HungNth/agent-skills --skill omp-plan-agy-delivery -a omp -y
+npx skills add https://github.com/HungNth/agent-skills --skill omp-plan-agy-delivery -y
+```
+
+- OMP (w/ mattpocock/skills)
+
+```bash
+npx skills add https://github.com/HungNth/agent-skills --skill ship-with-agy -y
 ```
 
 - Pi
