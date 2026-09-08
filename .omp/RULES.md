@@ -1,11 +1,3 @@
 Follow AGENTS.md as the authoritative source for workflow roles and orchestration rules.
 
-OpenSpec artifacts are the source of truth for an active OpenSpec change.
-
-Do not implement project code during OpenSpec explore or proposal-generation workflows.
-
-During OpenSpec apply, preserve the approved specification and design unless new evidence requires updating the OpenSpec artifacts first.
-
-Do not mark an OpenSpec implementation complete until relevant tests or verification have been run.
-
-Do not use OMP Plan Mode as a second planning system for an active OpenSpec change unless explicitly requested.
+OMP Plan Mode requires files to be saved in `docs/plans` with the suffix `-plan.md`.
