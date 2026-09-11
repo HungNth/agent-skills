@@ -49,6 +49,7 @@ npx skills add https://github.com/HungNth/agent-skills --skill omp-plan-agy-deli
 - OMP (w/ mattpocock/skills)
 
 ```bash
+npx skills@latest add mattpocock/skills -y
 npx skills add https://github.com/HungNth/agent-skills --skill ship-with-agy -y
 ```
 
@@ -203,7 +204,6 @@ npx skills add https://github.com/wshobson/agents --skill postgresql-table-desig
 
 ```bash
 npx skills add https://github.com/addyosmani/agent-skills --skill performance-optimization -y
-
 npx skills add https://github.com/addyosmani/agent-skills --skill code-simplification -y
 ```
 
@@ -230,5 +230,5 @@ npx skills add https://github.com/twostraws/swiftui-agent-skill --skill swiftui-
 ### Golang
 
 ```bash
-npx skills add JetBrains/go-modern-guidelines
+npx skills add JetBrains/go-modern-guidelines -y
 ```
