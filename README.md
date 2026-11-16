@@ -13,10 +13,7 @@ Custom skills currently available in this repo:
 skills/
 ├─ flow-launcher-csharp-plugin/
 ├─ flow-launcher-nodejs-plugin/
-├─ omp-plan-agy-delivery/
-├─ openspec-agy-delivery/
 ├─ photoshop-uxp-scripting/
-└─ pi-openspec-agy-delivery/
 ```
 
 ### Install custom skills
@@ -32,19 +29,6 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nod
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-csharp-plugin -y
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-plugin-dev -y
-```
-
-- OMP (plan-mode delivery)
-
-```bash
-npx skills add https://github.com/HungNth/agent-skills --skill omp-plan-agy-delivery -y
-```
-
-- OMP (w/ mattpocock/skills)
-
-```bash
-npx skills@latest add mattpocock/skills -y
-npx skills add https://github.com/HungNth/agent-skills --skill ship-with-agy -y
 ```
 
 ---
