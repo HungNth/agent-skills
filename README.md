@@ -34,12 +34,6 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-csh
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-plugin-dev -y
 ```
 
-- OMP
-
-```bash
-npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-delivery -y
-```
-
 - OMP (plan-mode delivery)
 
 ```bash
@@ -49,13 +43,8 @@ npx skills add https://github.com/HungNth/agent-skills --skill omp-plan-agy-deli
 - OMP (w/ mattpocock/skills)
 
 ```bash
+npx skills@latest add mattpocock/skills -y
 npx skills add https://github.com/HungNth/agent-skills --skill ship-with-agy -y
-```
-
-- Pi
-
-```bash
-npx skills add https://github.com/HungNth/agent-skills --skill pi-openspec-agy-delivery -a pi -y
 ```
 
 ---
@@ -68,41 +57,8 @@ npx skills add https://github.com/HungNth/agent-skills --skill pi-openspec-agy-d
 
 ```bash
 npx skills add https://github.com/github/awesome-copilot --skill create-readme -g -y
-```
-
-- Optionally use [Superpowers](https://github.com/obra/superpowers) with [OpenSpec](https://github.com/Fission-AI/OpenSpec). The delivery workflow does not require these skills.
-
-```bash
-
-npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
-npx skills add https://github.com/obra/superpowers --skill test-driven-development -y
-npx skills add https://github.com/obra/superpowers --skill systematic-debugging -y
-npx skills add https://github.com/obra/superpowers --skill receiving-code-review -y
-npx skills add https://github.com/obra/superpowers --skill verification-before-completion -y
-
-# Git
-npx skills add https://github.com/obra/superpowers --skill finishing-a-development-branch
-npx skills add https://github.com/obra/superpowers --skill using-git-worktrees -y
-
-```
-
-- None OpenSpec:
-
-```bash
-npx skills add https://github.com/obra/superpowers --skill executing-plans -y
-npx skills add https://github.com/obra/superpowers --skill writing-plans -y
-npx skills add https://github.com/obra/superpowers --skill brainstorming -y
-
-npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
-npx skills add https://github.com/obra/superpowers --skill test-driven-development -y
-npx skills add https://github.com/obra/superpowers --skill systematic-debugging -y
-npx skills add https://github.com/obra/superpowers --skill requesting-code-review -y
-npx skills add https://github.com/obra/superpowers --skill receiving-code-review -y
-npx skills add https://github.com/obra/superpowers --skill verification-before-completion -y
-
-npx skills add https://github.com/obra/superpowers --skill finishing-a-development-branch
-npx skills add https://github.com/obra/superpowers --skill using-git-worktrees -y
-
+npx skills add https://github.com/anhnx000/viet-nhu-nguoi --skill viet-nhu-nguoi -g -y
+npx skills add https://github.com/github/awesome-copilot --skill git-commit -g -y
 ```
 
 ### JavaScript / TypeScript
@@ -175,6 +131,7 @@ npx skills add https://github.com/wordpress/agent-skills --skill wpds -y
 npx skills add https://github.com/bartekmis/wordpress-performance-best-practises --skill wordpress-performance-best-practices -y
 npx skills add https://github.com/automattic/wordpress-activitypub --skill code-style -y
 npx skills add https://github.com/jeffallan/claude-skills --skill wordpress-pro -y
+npx skills add https://github.com/jeffallan/claude-skills --skill php-pro -y
 
 npx skills add https://github.com/sickn33/antigravity-awesome-skills --skill wordpress-woocommerce-development -y
 
@@ -183,7 +140,6 @@ npx skills add https://github.com/sickn33/antigravity-awesome-skills --skill wor
 # Browser Extension
 
 ```bash
-npx skills add https://github.com/addyosmani/agent-skills --skill code-simplification -y
 npx skills add https://github.com/github/awesome-copilot --skill chrome-devtools -y
 npx skills add https://github.com/mindrally/skills --skill chrome-extension-development -y
 npx skills add https://github.com/quangpl/browser-extension-skills --skill extension-ui -y
@@ -203,14 +159,7 @@ npx skills add https://github.com/wshobson/agents --skill postgresql-table-desig
 
 ```bash
 npx skills add https://github.com/addyosmani/agent-skills --skill performance-optimization -y
-
 npx skills add https://github.com/addyosmani/agent-skills --skill code-simplification -y
-```
-
-### API
-
-```bash
-npx skills add https://github.com/wshobson/agents --skill api-design-principles -y
 ```
 
 ### Git / Github
