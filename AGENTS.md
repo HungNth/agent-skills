@@ -56,7 +56,7 @@ AGY workers follow their assigned implementer or verifier brief and the skill's 
 
 ### Issue tracker
 
-Track specs and tickets in GitHub Issues for `Hungnth/agent-skills`. Before tracker operations, read `docs/agents/issue-tracker.md`.
+Track specs and tickets as local Markdown under `.scratch/`. Before tracker operations, read `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

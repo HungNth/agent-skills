@@ -1,57 +1,27 @@
-# Issue tracker: GitHub
+# Issue tracker: Local Markdown
 
-Specs and tickets live in GitHub Issues at `Hungnth/agent-skills`.
-Use `gh` with `--repo Hungnth/agent-skills`; the Git remote uses an SSH
-alias, so do not rely on automatic repository inference.
+Specs and tickets for this repo live as Markdown files in `.scratch/`.
 
-## Issue operations
+## Conventions
 
-- Create: `gh issue create --repo Hungnth/agent-skills --title "<title>" --body-file "<body-file>"`
-- Read: `gh issue view <number> --repo Hungnth/agent-skills --json number,title,body,labels,state,comments`
-- List: `gh issue list --repo Hungnth/agent-skills --state open --json number,title,body,labels`
-- Comment: `gh issue comment <number> --repo Hungnth/agent-skills --body-file "<body-file>"`
-- Labels: `gh issue edit <number> --repo Hungnth/agent-skills --add-label "<label>"` or `--remove-label "<label>"`
-- Close: `gh issue close <number> --repo Hungnth/agent-skills --comment "<resolution>"`
+- One feature per directory: `.scratch/<feature-slug>/`
+- The spec is `.scratch/<feature-slug>/spec.md`
+- Implementation tickets are one file each at `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order
+- Triage state is a `Status:` line near the top of each file, using `docs/agents/triage-labels.md`
+- Comments append under a `## Comments` heading
 
-“Publish to the issue tracker” means create a GitHub issue.
-“Fetch the relevant ticket” means read its body, labels, state, and comments.
-Use canonical issue URLs in cross-agent handoffs.
+“Publish to the issue tracker” means create the corresponding Markdown file. “Fetch the relevant ticket” means read its full file. Use repository-relative paths as canonical references.
 
-Read `docs/agents/triage-labels.md` when assigning triage roles.
-Follow the active delivery workflow's acceptance gate before closing tickets.
+## Delivery completion
 
-## Pull requests as a triage surface
-
-**PRs as a request surface: no.**
+An approved spec and its tickets are immutable during delivery. An accepted commit must include `Ticket: <repository-relative-path>` in its message or body; these commit markers are the durable completion ledger.
 
 ## Wayfinding operations
 
-For `/wayfinder`, the map is one issue labelled `wayfinder:map`.
-Its body holds Notes, Decisions-so-far, and Fog.
+For `/wayfinder`, the map is `.scratch/<effort>/map.md` and each child is `.scratch/<effort>/issues/<NN>-<slug>.md`.
 
-Link child tickets as GitHub sub-issues using `gh api`. Where sub-issues
-are unavailable, list children in the map's task list and put
-`Part of #<map>` in each child body.
-
-Label children `wayfinder:<type>`, where type is `research`, `prototype`,
-`grilling`, or `task`.
-
-Represent blockers with native GitHub issue dependencies:
-
-`gh api --method POST repos/Hungnth/agent-skills/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-database-id>`
-
-Get the database ID with:
-
-`gh api repos/Hungnth/agent-skills/issues/<blocker> --jq .id`
-
-Use the database ID, not the issue number or node ID. Where native
-dependencies are unavailable, record `Blocked by: #<n>, #<n>` in the
-child body. A ticket is unblocked when every blocker is closed.
-
-For the frontier, inspect the map's open children and exclude assigned
-tickets or tickets with open blockers. Select the first remaining child
-in map order.
-
-Claim with `gh issue edit <number> --repo Hungnth/agent-skills --add-assignee @me`.
-Resolve by commenting with the result, closing the child, and adding a
-concise result plus link to the map's Decisions-so-far.
+- Record `Type:` as `research`, `prototype`, `grilling`, or `task`.
+- Record `Status:` as `claimed` or `resolved`.
+- Record blockers as `Blocked by: NN, NN`.
+- The frontier is the first open, unblocked, unclaimed child by number.
+- Claim by setting `Status: claimed`; resolve by adding `## Answer`, setting `Status: resolved`, and linking the result from the map.
