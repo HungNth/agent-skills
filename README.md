@@ -33,7 +33,7 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-csh
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-plugin-dev -y
 ```
 
-- Ship with AGY:
+- Codex + Herdr Core + AGY (w/ mattpocock/skills)
 
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill ship-with-agy -y

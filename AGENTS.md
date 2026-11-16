@@ -31,7 +31,7 @@ grill-with-docs
 
 Use `grill-me` instead of `grill-with-docs` only when persistent domain documentation is not desired.
 
-Keep requirement discovery, specification, and ticket decomposition in the primary OMP context.
+Keep requirement discovery, specification, and ticket decomposition in the primary Codex context.
 
 ### Ticket Design
 
@@ -48,9 +48,9 @@ Do not turn tickets into implementation scripts with unnecessary file paths or l
 
 ### AGY delivery
 
-When the user asks OMP to implement, ship, execute, continue, or finish an approved `to-tickets` set with AGY, read [ship-with-agy](skills/ship-with-agy/SKILL.md) before delivery actions. It is the authoritative source for role boundaries, preflight, serial ticket execution, verification, acceptance, commits, tracker updates, and retry limits; follow its phase-specific reference pointers.
+For requests to implement, ship, execute, continue, or finish an approved ticket set with AGY, Codex must read [ship-with-agy](skills/ship-with-agy/SKILL.md) before delivery. Codex is the Lead Agent: orchestrate through Herdr Core, directly review changes, verify acceptance, and commit accepted work. AGY alone edits product code and tests during this workflow.
 
-AGY workers follow their assigned implementer or verifier brief and the skill's role boundaries; they do not invoke the conductor workflow. Planning, skill/document maintenance, and explicit requests for OMP to edit product code directly remain outside this delivery workflow.
+AGY workers follow their assigned implementation brief and do not invoke the conductor workflow. Use one feature worktree and serial tickets, with a fresh worker for each ticket. Explicit requests for Codex to implement directly, planning, and skill/document maintenance remain outside this delivery workflow. Never push, merge, or remove a delivery worktree without separate user direction.
 
 ## Agent skills
 
