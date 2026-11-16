@@ -22,6 +22,8 @@ skills/
 npx skills add https://github.com/HungNth/agent-skills --skill photoshop-uxp-scripting -y
 ```
 
+- Flow Launcher plugin skills:
+
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nodejs-plugin -y
 ```
@@ -29,6 +31,12 @@ npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-nod
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-csharp-plugin -y
 npx skills add https://github.com/HungNth/agent-skills --skill flow-launcher-plugin-dev -y
+```
+
+- Ship with AGY:
+
+```bash
+npx skills add https://github.com/HungNth/agent-skills --skill ship-with-agy -y
 ```
 
 ---
