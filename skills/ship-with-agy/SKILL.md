@@ -120,9 +120,38 @@ the Git marker is the completion ledger. If commit fails, preserve state and
 do not advance. Then hc kill <worker> and hc rm <worker> for this workflow's
 accepted worker only. No push, merge, rebase, deploy, branch or worktree deletion.
 
+## 6. Advance the Ticket Frontier
+
+Re-read the approved graph and exact accepted Ticket trailers after Delivery
+Base. Use [frontier rules](references/gates.md) to select the first runnable
+ticket. Start it only after the preceding accepted worker has been cleaned up.
+Every next ticket has a fresh AGY context and fixed base at the new HEAD.
+Never reuse another ticket's worker or run parallel writers.
+
+If pending tickets remain but none is runnable, report the unresolved dependency
+instead of claiming completion. When all tickets have accepted commits, enter
+final closeout below.
+
+## 7. Final closeout
+
+Require a clean committed delivery worktree. Run the repository's authoritative
+full checks and compare the aggregate Delivery-Base..HEAD delta with the parent
+spec, including interactions across tickets. Codex performs this review itself.
+
+A narrow implementation defect attributable to one ticket goes to a fresh
+same-ticket worker, then through the normal review and commit gates. Retain
+the original Delivery Base and record the follow-up against the same ticket.
+Allow at most two final-closeout remediation cycles and re-run full closeout
+after each. Cross-ticket design or requirement gaps return to planning.
+
+Report parent spec, accepted tickets in execution order and commit per ticket,
+remediation counts, exact verification evidence, changed files, tracker completion
+reconstructed from Git, remaining risks, final verdict and branch/worktree state.
+Distinguish implemented changes from accepted tickets and any blocked observation.
+Confirm no push/merge/deploy occurred. Preserve branch and worktree for user-directed
+integration; do not close the parent spec or mutate approved planning files.
+
 ## Verification
 
 Read [verification](references/verification.md) for installer contracts and the
 disposable live smoke. Structural validation is not evidence of runtime success.
-Until multi-ticket closeout is available, finish after the accepted ticket and
-report its canonical ref, commit, checks and remaining work.

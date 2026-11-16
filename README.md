@@ -46,7 +46,7 @@ npx skills add https://github.com/HungNth/agent-skills --skill openspec-agy-deli
 npx skills add https://github.com/HungNth/agent-skills --skill omp-plan-agy-delivery -y
 ```
 
-- OMP (w/ mattpocock/skills)
+- Codex + Herdr Core + AGY (w/ mattpocock/skills)
 
 ```bash
 npx skills add https://github.com/HungNth/agent-skills --skill ship-with-agy -y

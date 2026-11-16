@@ -30,7 +30,22 @@ A ticket is accepted only when Git history on the delivery branch after Delivery
 Base contains a commit with the exact standalone trailer Ticket: <canonical-ref>.
 Use git log <base>..HEAD --format=%B to inspect exact lines, not substring matches,
 working-tree checkboxes, status labels or commits on another branch.
-For one-ticket delivery require every blocker to have such a marker.
+Require every blocker to have such a marker. Use the recorded Delivery-Base
+trailer to reconstruct the original base across sessions; see recovery for
+validation and pre-first-commit fallback.
+
+## Ticket Frontier
+
+Before dispatch validate the entire graph: unique canonical refs, one approved
+parent, every blocker inside the set, no cycles, and approved stable ordering.
+The frontier contains pending tickets whose blockers all have exact accepted
+markers. Choose the first by approved order (local number order when approved).
+Recompute after each commit and worker cleanup; never trust a cached frontier.
+
+An Implements-Ticket trailer records implementation only, not acceptance, so
+it cannot unblock a ticket in normal delivery. An explicit user-authorized
+bootstrap that defers live observations must be reported separately and must
+not be reconstructed as a normally accepted delivery.
 
 ## Acceptance
 
