@@ -23,3 +23,26 @@ Give the template this task as the launch message:
     Report STARTED, BLOCKED, DONE using hc send <parent-address>.
     DONE includes changed paths, criterion coverage, exact check evidence,
     deviations and concerns. Stay idle for Codex review; DONE is not acceptance.
+
+## Same-ticket remediation
+
+Send to the existing owning worker only after classifying an implementation defect:
+
+    Continue SAME ticket <canonical ref>; correction <n> of maximum 3.
+    Blocking findings: <file/line, failed criterion, exact check evidence>.
+    Fix only these defects under the approved scope; report a requirement gap
+    instead of changing requirements. No staging, commits, or other tickets.
+    Re-run <affected checks and required ticket checks>.
+    Report DONE with the delta, evidence and concerns to <explicit parent>.
+    Remain idle for another complete Codex review.
+
+## New worker continuing the same unfinished ticket
+
+Include the normal implementation brief, plus:
+
+    Existing candidate belongs to <canonical ticket> based on <provenance>.
+    Read status, staged/unstaged diffs and every untracked file before editing.
+    Preserve valid progress and finish only unmet acceptance clauses.
+    Ticket base: <original fixed ticket base>; current HEAD: <SHA>.
+    Prior remediation prompts used: <proven count>; remaining: <count>.
+    Stop if the existing candidate contradicts the approved scope.

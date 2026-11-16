@@ -29,3 +29,16 @@ Verify the spec/ticket did not change and the delivery worktree remains clean.
 
 Record BLOCKED if the account/service cannot run the model. Never replace the
 real smoke with mocked output or label a local Git replay as a live AGY PASS.
+
+## Recovery observations
+
+In a disposable committed Git fixture, follow the recovery reference for an
+attributable dirty ticket; compare its diff and untracked contents before/after
+read-only inspection. Add an ambiguously owned candidate and confirm the
+decision stops without reset, stash, clean or commit.
+
+Alter one file between two fingerprints and confirm the earlier review is
+invalidated. For a dead worker require provenance before preparing a new
+continuation brief. Exercise repeated-blocker decisions from a transcript with
+three correction prompts; missing retry history must not reset the budget.
+These Git/transcript exercises do not prove live Herdr/AGY behavior.

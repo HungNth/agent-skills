@@ -56,7 +56,8 @@ lowercase letters/digits/hyphens and use:
 Record HEAD as Delivery Base before creating the branch/worktree. Validate the
 resolved target and Git branch name, inspect existing worktrees and refs, then
 use git worktree add -b <branch> <absolute-path> <base>. An existing branch/path
-enters recovery, never overwrite it. Keep this branch and worktree after delivery.
+enters [recovery](references/recovery.md), never overwrite it. Keep this branch
+and worktree after delivery.
 
 ## 3. Implement one ticket
 
@@ -97,6 +98,11 @@ Codex does not edit source/tests or run mutating fixers. Any candidate change
 during review invalidates the round. Accept only when all required checks and
 observations pass, no blocking findings remain, and the fingerprint is unchanged.
 Worker DONE alone never satisfies acceptance.
+
+For a rejected or interrupted candidate read [recovery](references/recovery.md).
+Return implementation defects to the same worker, at most three correction
+prompts after the initial task. Stop for planning gaps, environment blockers
+or protected decisions. Preserve unaccepted changes and relevant terminals.
 
 ## 5. Commit the accepted candidate
 
