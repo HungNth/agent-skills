@@ -230,5 +230,11 @@ npx skills add https://github.com/twostraws/swiftui-agent-skill --skill swiftui-
 ### Golang
 
 ```bash
-npx skills add JetBrains/go-modern-guidelines
+npx skills add JetBrains/go-modern-guidelines -y
+```
+
+### Security
+
+```bash
+npx skills add https://github.com/cloudflare/security-audit-skill --skill security-audit -y
 ```
