@@ -36,6 +36,10 @@ class Installers(unittest.TestCase):
             self.assertEqual(target.read_bytes(), source.read_bytes())
             self.assertEqual(sibling.read_text(), "keep")
             self.assertNotEqual(run("--unknown").returncode, 0)
+            target.unlink()
+            target.mkdir()
+            self.assertNotEqual(run(force).returncode, 0)
+            self.assertEqual(list(target.iterdir()), [])
 
     def test_powershell(self):
         shell = shutil.which("pwsh") or shutil.which("powershell")

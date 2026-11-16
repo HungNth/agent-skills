@@ -12,6 +12,10 @@ source_file="$script_dir/../templates/agy-implementer.md"
 config_dir=${XDG_CONFIG_HOME:-"${HOME:?HOME or XDG_CONFIG_HOME is required}/.config"}
 directory="$config_dir/herdr-core/templates"
 target="$directory/agy-implementer.md"
+if [ -L "$target" ] || { [ -e "$target" ] && [ ! -f "$target" ]; }; then
+    printf 'Expected a regular template file: %s\n' "$target" >&2
+    exit 1
+fi
 if [ -e "$target" ]; then
     if cmp -s "$source_file" "$target"; then
         printf 'Already installed: %s\n' "$target"
