@@ -138,13 +138,30 @@ ask_secret() {
 # line) and sets $KEY. Idempotent. Creates ENV_FILE at mode 0600; writes through
 # a symlink and keeps an existing file's mode.
 write_env() {
-  local key="$1" value="$2" tmp sq="'\\''"
-  [[ -e "$ENV_FILE" ]] || (umask 077 && : > "$ENV_FILE")
-  tmp=$(mktemp)
-  grep -vE "^${key}=" "$ENV_FILE" > "$tmp" || true
-  printf "%s='%s'\n" "$key" "${value//\'/$sq}" >> "$tmp"
-  cat "$tmp" > "$ENV_FILE"
-  rm -f "$tmp"
+  local key="$1" value="$2" target="$ENV_FILE" tmp status=0 encoded sq="'\\''"
+  encoded="'${value//\'/$sq}'"
+  if [[ "$value" == *"'"* && "$value" != *[\\\"\$\`]* ]]; then
+    # Dotenv parsers read this as a single value, as Bash does.
+    encoded="\"$value\""
+  fi
+  if [[ -L "$target" ]]; then
+    target=$(realpath -- "$target") || return 1
+  fi
+  [[ ! -e "$target" || -f "$target" ]] || return 1
+  tmp=$(mktemp -- "$target.XXXXXX") || return 1
+  if [[ -f "$target" ]]; then
+    if ! cp -p -- "$target" "$tmp"; then
+      rm -f -- "$tmp"
+      return 1
+    fi
+    grep -vE "^${key}=" "$target" > "$tmp" || status=$?
+  fi
+  if (( status > 1 )) ||
+     ! printf '%s=%s\n' "$key" "$encoded" >> "$tmp" ||
+     ! mv -f -- "$tmp" "$target"; then
+    rm -f -- "$tmp"
+    return 1
+  fi
   printf -v "$key" '%s' "$value"
   WRITTEN_ENV+=("$key")
   printf '  %s✓ wrote%s %s → %s\n' "$GREEN" "$RESET" "$key" "$ENV_FILE"
