@@ -50,7 +50,19 @@ npx skills add https://github.com/HungNth/agent-skills --skill ship-with-agy -y
 ```bash
 npx skills add https://github.com/github/awesome-copilot --skill create-readme -g -y
 npx skills add https://github.com/anhnx000/viet-nhu-nguoi --skill viet-nhu-nguoi -g -y
+```
+
+- Git / Github CLI
+
+```bash
 npx skills add https://github.com/github/awesome-copilot --skill git-commit -g -y
+npx skills add https://github.com/logicrw/gh-cli-skill --skill gh-cli -g -y
+npx skills add https://github.com/github/awesome-copilot --skill gh-attach -g -y
+npx skills add https://github.com/github/awesome-copilot --skill git-flow-branch-creator -g -y
+npx skills add https://github.com/github/awesome-copilot --skill github-actions-efficiency -g -y
+npx skills add https://github.com/github/awesome-copilot --skill github-actions-hardening -g -y
+npx skills add https://github.com/github/awesome-copilot --skill github-issues -g -y
+npx skills add https://github.com/github/awesome-copilot --skill github-release -g -y
 ```
 
 ### JavaScript / TypeScript
